@@ -1,0 +1,83 @@
+---
+// src/components/ClientsSlider.astro
+const clients = [
+  { name: "Alya", logo: "/clientes/alya.png" },
+  { name: "Backus", logo: "/clientes/backus.png" },
+  { name: "Calderas Intesa", logo: "/clientes/calderas.png" },
+  { name: "Calidda", logo: "/clientes/calidda.png" },
+  { name: "Cosapi", logo: "/clientes/cosapi.png" },
+  { name: "Danper", logo: "/clientes/danper.png" },
+  { name: "Heineken", logo: "/clientes/heineken.png" },
+  { name: "Hialpesa", logo: "/clientes/hialpesa.png" },
+  { name: "Ingevap", logo: "/clientes/ingevap.png" },
+  { name: "Newmont", logo: "/clientes/newmont.png" },
+  { name: "Omatt", logo: "/clientes/omat.png" },
+  { name: "Siderperu", logo: "/clientes/siderperu.png" },
+  { name: "Tecavi", logo: "/clientes/tecavi.png" },
+];
+
+// Multiplicamos los clientes para que el scroll nunca se quede vacío en pantallas grandes
+const duplicatedClients = [...clients, ...clients];
+---
+
+<section class="py-16 bg-white overflow-hidden border-t border-gray-100">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-8 text-center mb-12">
+    <h2 class="text-2xl md:text-3xl font-black text-[#0d1624] tracking-tight uppercase mb-4">Nuestros Clientes</h2>
+    <div class="w-16 h-1 bg-[#f04f23] mx-auto rounded-full"></div>
+  </div>
+
+  {/* Contenedor relativo para el efecto carrusel */}
+  <div class="relative flex overflow-x-hidden group w-full max-w-[1600px] mx-auto">
+    
+    {/* Pista principal que se mueve a la izquierda */}
+    <div class="animate-marquee whitespace-nowrap flex items-center py-8">
+      {duplicatedClients.map((client) => (
+        <span class="mx-8 md:mx-16 inline-flex justify-center items-center w-64 md:w-96 transition-all duration-300">
+          <img 
+            src={client.logo} 
+            alt={client.name} 
+            class="object-contain h-24 md:h-32 w-full"
+          />
+        </span>
+      ))}
+    </div>
+    
+    {/* Pista clonada absolutamente posicionada para crear el loop infinito */}
+    <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-8">
+      {duplicatedClients.map((client) => (
+        <span class="mx-8 md:mx-16 inline-flex justify-center items-center w-64 md:w-96 transition-all duration-300">
+          <img 
+            src={client.logo} 
+            alt={client.name} 
+            class="object-contain h-24 md:h-32 w-full"
+          />
+        </span>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  .animate-marquee2 {
+    animation: marquee2 40s linear infinite;
+  }
+  
+  /* Pausar animación si el usuario pone el mouse encima */
+  .group:hover .animate-marquee,
+  .group:hover .animate-marquee2 {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+  @keyframes marquee2 {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+  }
+</style>

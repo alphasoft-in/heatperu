@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@layer base {
+  .markdown-body ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .markdown-body ul li::marker {
+    color: #f04f23;
+  }
+  .markdown-body ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .markdown-body ol li::marker {
+    color: #f04f23;
+  }
+  .markdown-body li {
+    margin-bottom: 0.25rem;
+  }
+  .markdown-body p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .markdown-body strong {
+    font-weight: 700;
+  }
+  
+  /* Custom select arrow styling to move it away from the edge */
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 2.5rem !important;
+  }
+  
+  select::-ms-expand {
+    display: none;
+  }
+}

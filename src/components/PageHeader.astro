@@ -1,0 +1,79 @@
+---
+export interface Props {
+  title: string;
+  breadcrumbs: { name: string; url?: string }[];
+  bgImage?: string;
+  bgPosition?: string;
+}
+
+const { title, breadcrumbs, bgImage = "/banner_bg.jpg", bgPosition = "object-center" } = Astro.props;
+---
+
+<div class="relative w-full h-[280px] md:h-[400px] flex flex-col items-center justify-center bg-[#070c13] overflow-hidden group">
+  
+  {/* Imagen con zoom sutil cinematográfico */}
+  <div class="absolute inset-0 z-0">
+    <img 
+      src={bgImage} 
+      alt={title}
+      class={`w-full h-full object-cover ${bgPosition} opacity-50 scale-100 group-hover:scale-105 transition-transform duration-[15s] ease-out`}
+      onerror="this.style.display='none'"
+    />
+  </div>
+
+  {/* Overlays Cinematográficos */}
+  <div class="absolute inset-0 bg-gradient-to-b from-[#0d1624]/80 via-transparent to-[#0d1624]/90 z-0 pointer-events-none"></div>
+  <div class="absolute inset-0 bg-black/10 mix-blend-multiply z-0 pointer-events-none"></div>
+
+  {/* Contenido */}
+  <div class="relative z-10 flex flex-col items-center text-center px-4 pt-10 md:pt-12 pb-12 md:pb-16 w-full max-w-4xl mx-auto transform translate-y-4 animate-fade-in-up">
+    
+    {/* Breadcrumbs Premium */}
+    <div class="text-[11px] md:text-[12px] font-semibold tracking-[0.2em] uppercase flex flex-wrap justify-center items-center text-slate-300 mb-2 md:mb-3">
+      {breadcrumbs.map((crumb, index) => (
+        <>
+          <span class="inline-flex items-center">
+            {crumb.url ? (
+              <a href={crumb.url} class="hover:text-white transition-colors duration-300 relative group/link">
+                {crumb.name}
+                <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#f04f23] group-hover/link:w-full transition-all duration-300"></span>
+              </a>
+            ) : (
+              <span class="text-[#f04f23] font-bold drop-shadow-md">{crumb.name}</span>
+            )}
+          </span>
+          {index < breadcrumbs.length - 1 && (
+            <span class="mx-3 text-slate-500 font-light text-sm">/</span>
+          )}
+        </>
+      ))}
+    </div>
+
+    <h1 class="text-xl md:text-2xl lg:text-[28px] font-semibold text-white uppercase tracking-wide leading-snug mb-6 drop-shadow-2xl">
+      {title}
+    </h1>
+    
+    {/* Divisor con brillo sutil */}
+    <div class="w-20 h-[3px] bg-gradient-to-r from-transparent via-[#f04f23] to-transparent opacity-90 shadow-[0_0_12px_rgba(240,79,35,0.7)]"></div>
+
+  </div>
+
+  {/* Línea inferior para transición limpia */}
+  <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700/50 to-transparent z-10"></div>
+</div>
+
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>

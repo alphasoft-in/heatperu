@@ -1,0 +1,38 @@
+---
+// src/pages/admin/categorias/editar/[id].astro
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import CategoryForm from "../../../../components/admin/CategoryForm.tsx";
+import { db } from "../../../../db";
+import { categories } from "../../../../db/schema";
+import { eq } from "drizzle-orm";
+
+const { id } = Astro.params;
+const categoryId = parseInt(id as string);
+
+if (isNaN(categoryId)) {
+  return Astro.redirect('/admin/categorias');
+}
+
+const result = await db.select().from(categories).where(eq(categories.id, categoryId));
+
+if (result.length === 0) {
+  return Astro.redirect('/admin/categorias');
+}
+
+const category = result[0];
+---
+
+<AdminLayout title={`Editar Categoría: ${category.name}`}>
+  <div class="mb-8">
+    <a href="/admin/categorias" class="text-sm font-medium text-gray-500 hover:text-[#f04f23] mb-4 inline-flex items-center">
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Categorías
+    </a>
+    <h2 class="text-2xl font-bold text-gray-900">Editar Categoría</h2>
+    <p class="mt-1 text-sm text-gray-500">Modifica el nombre o cambia la imagen de "{category.name}".</p>
+  </div>
+
+  <div class="max-w-2xl">
+    <CategoryForm initialData={category} client:load />
+  </div>
+</AdminLayout>

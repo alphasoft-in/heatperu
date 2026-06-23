@@ -1,0 +1,137 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import CreateSubcategoryModal from "../../../components/admin/CreateSubcategoryModal.tsx";
+import EditSubcategoryModal from "../../../components/admin/EditSubcategoryModal.tsx";
+import DeleteSubcategoryButton from "../../../components/admin/DeleteSubcategoryButton.tsx";
+import { db } from "../../../db";
+import { categories, subcategories } from "../../../db/schema";
+import { desc, count, eq } from "drizzle-orm";
+
+const pageParam = Astro.url.searchParams.get("page");
+const page = pageParam ? parseInt(pageParam, 10) : 1;
+const limit = 5;
+const offset = (page - 1) * limit;
+
+const totalItemsResult = await db.select({ value: count() }).from(subcategories);
+const totalItems = totalItemsResult[0].value;
+const totalPages = Math.ceil(totalItems / limit);
+
+const allCategories = await db.select().from(categories).orderBy(desc(categories.id));
+
+const dbSubcategories = await db.select({
+  subcategory: subcategories,
+  categoryName: categories.name
+})
+  .from(subcategories)
+  .leftJoin(categories, eq(subcategories.categoryId, categories.id))
+  .orderBy(desc(subcategories.id))
+  .limit(limit)
+  .offset(offset);
+---
+
+<AdminLayout title="Gestión de Subcategorías | Heat Factory">
+  
+  <div class="mb-5">
+    <h2 class="text-xl font-bold text-[#0d1624]">Gestión de Subcategorías</h2>
+    <p class="mt-1 text-[13px] text-gray-500">Agrega, edita o elimina las subcategorías de tu catálogo.</p>
+  </div>
+
+  <div class="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+      <h3 class="text-base font-semibold text-slate-800">Subcategorías Actuales ({totalItems})</h3>
+      <CreateSubcategoryModal categories={allCategories} client:load />
+    </div>
+    
+    <div class="p-0">
+      {dbSubcategories.length === 0 ? (
+        <p class="text-gray-500 text-sm p-6 text-center">No hay subcategorías registradas aún. ¡Añade la primera!</p>
+      ) : (
+        <>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider w-20">Imagen</th>
+                <th scope="col" class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Subcategoría</th>
+                <th scope="col" class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Categoría Padre</th>
+                <th scope="col" class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">URL</th>
+                <th scope="col" class="px-5 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              {dbSubcategories.map(({ subcategory, categoryName }) => (
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                  <td class="px-5 py-2.5 whitespace-nowrap">
+                    <div class="flex-shrink-0 h-10 w-10 bg-white rounded border border-gray-200 overflow-hidden flex items-center justify-center p-1 shadow-sm">
+                      {subcategory.imageUrl && subcategory.imageUrl !== '/placeholder.png' ? (
+                        <img src={subcategory.imageUrl} alt={subcategory.name} class="h-full w-full object-contain" />
+                      ) : (
+                        <svg class="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      )}
+                    </div>
+                  </td>
+                  <td class="px-5 py-2.5">
+                    <div class="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">{subcategory.name}</div>
+                  </td>
+                  <td class="px-5 py-2.5">
+                    <div class="text-[11px] text-gray-500 uppercase tracking-wider">{categoryName}</div>
+                  </td>
+                  <td class="px-5 py-2.5 whitespace-nowrap">
+                    <div class="text-xs text-gray-500 bg-gray-100/80 px-2 py-0.5 rounded inline-block font-mono border border-gray-200/60">
+                      /{subcategory.slug}
+                    </div>
+                  </td>
+                  <td class="px-5 py-2.5 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex justify-end gap-3">
+                      <EditSubcategoryModal subcategory={subcategory} categories={allCategories} client:load />
+                      <DeleteSubcategoryButton id={subcategory.id} name={subcategory.name} client:load />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Paginación */}
+        {totalPages > 1 && (
+          <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+              Mostrando <span class="font-medium">{offset + 1}</span> a <span class="font-medium">{Math.min(offset + limit, totalItems)}</span> de <span class="font-medium">{totalItems}</span> subcategorías
+            </div>
+            <div class="flex space-x-2">
+              <a 
+                href={page > 1 ? `?page=${page - 1}` : '#'} 
+                class={`px-3 py-1 border rounded-md text-sm font-medium transition-colors ${page > 1 ? 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'}`}
+              >
+                Anterior
+              </a>
+              
+              <div class="flex space-x-1 items-center px-2">
+                {Array.from({ length: totalPages }).map((_, i) => (
+                  <a 
+                    href={`?page=${i + 1}`}
+                    class={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${page === i + 1 ? 'bg-[#f04f23] text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                  >
+                    {i + 1}
+                  </a>
+                ))}
+              </div>
+
+              <a 
+                href={page < totalPages ? `?page=${page + 1}` : '#'} 
+                class={`px-3 py-1 border rounded-md text-sm font-medium transition-colors ${page < totalPages ? 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'}`}
+              >
+                Siguiente
+              </a>
+            </div>
+          </div>
+        )}
+        </>
+      )}
+    </div>
+  </div>
+  
+</AdminLayout>

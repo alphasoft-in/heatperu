@@ -1,0 +1,18 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+---
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="/logoheat.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Heat Factory - Alta Tecnología</title>
+	</head>
+	<body>
+		<slot />
+		<Footer />
+	</body>
+</html>
