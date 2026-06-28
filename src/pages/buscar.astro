@@ -84,12 +84,6 @@ const categoryResults = searchTerm
     )}
 
     {/* Sección de productos */}
-    <div class="mb-10 flex flex-col items-center md:items-start text-center md:text-left">
-      <h2 class="text-xl font-medium text-[#0d1624]">
-        {productResults.length} {productResults.length === 1 ? 'Producto encontrado' : 'Productos encontrados'}
-      </h2>
-      <div class="w-16 h-[3px] bg-[#f04f23] mt-4"></div>
-    </div>
 
     {productResults.length > 0 ? (
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">

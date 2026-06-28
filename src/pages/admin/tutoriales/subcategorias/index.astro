@@ -1,0 +1,126 @@
+---
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import CreateTutorialSubcategoryModal from "../../../../components/admin/CreateTutorialSubcategoryModal.tsx";
+import DeleteTutorialSubcategoryButton from "../../../../components/admin/DeleteTutorialSubcategoryButton.tsx";
+import { db } from "../../../../db";
+import { tutorialSubcategories, tutorialCategories } from "../../../../db/schema";
+import { desc, count, eq } from "drizzle-orm";
+
+const pageParam = Astro.url.searchParams.get("page");
+const page = pageParam ? parseInt(pageParam, 10) : 1;
+const limit = 10;
+const offset = (page - 1) * limit;
+
+const allCategories = await db.select({ id: tutorialCategories.id, name: tutorialCategories.name })
+  .from(tutorialCategories)
+  .orderBy(tutorialCategories.name);
+
+const totalItemsResult = await db.select({ value: count() }).from(tutorialSubcategories);
+const totalItems = totalItemsResult[0].value;
+const totalPages = Math.ceil(totalItems / limit);
+
+const dbSubcategories = await db.select({
+  id: tutorialSubcategories.id,
+  name: tutorialSubcategories.name,
+  slug: tutorialSubcategories.slug,
+  categoryId: tutorialSubcategories.categoryId,
+  categoryName: tutorialCategories.name,
+})
+  .from(tutorialSubcategories)
+  .leftJoin(tutorialCategories, eq(tutorialSubcategories.categoryId, tutorialCategories.id))
+  .orderBy(desc(tutorialSubcategories.id))
+  .limit(limit)
+  .offset(offset);
+---
+
+<AdminLayout title="Subcategorías de Tutoriales | Heat Factory">
+
+  <div class="mb-5">
+    <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+      <a href="/admin/tutoriales" class="hover:text-[#f04f23]">Tutoriales</a>
+      <span>›</span>
+      <a href="/admin/tutoriales/categorias" class="hover:text-[#f04f23]">Categorías</a>
+      <span>›</span>
+      <span class="text-gray-800 font-medium">Subcategorías</span>
+    </div>
+    <h2 class="text-xl font-bold text-[#0d1624]">Subcategorías de Tutoriales</h2>
+    <p class="mt-1 text-[13px] text-gray-500">Gestiona las subcategorías dentro de cada categoría de tutoriales.</p>
+  </div>
+
+  <div class="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+      <h3 class="text-base font-semibold text-slate-800">Subcategorías ({totalItems})</h3>
+      {allCategories.length === 0 ? (
+        <span class="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-md border border-amber-200">
+          Primero crea una <a href="/admin/tutoriales/categorias" class="underline font-medium">categoría de tutorial</a>
+        </span>
+      ) : (
+        <CreateTutorialSubcategoryModal categories={allCategories} client:load />
+      )}
+    </div>
+
+    <div class="p-0">
+      {dbSubcategories.length === 0 ? (
+        <p class="text-gray-500 text-sm p-6 text-center">No hay subcategorías aún. ¡Añade la primera!</p>
+      ) : (
+        <>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Subcategoría</th>
+                  <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Categoría Padre</th>
+                  <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">URL</th>
+                  <th class="px-5 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-100">
+                {dbSubcategories.map((sub) => (
+                  <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-5 py-2.5">
+                      <div class="text-[12px] font-semibold text-slate-700">{sub.name}</div>
+                    </td>
+                    <td class="px-5 py-2.5">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-orange-50 text-[#f04f23] border border-orange-100">
+                        {sub.categoryName || '—'}
+                      </span>
+                    </td>
+                    <td class="px-5 py-2.5">
+                      <div class="text-xs text-gray-500 bg-gray-100/80 px-2 py-0.5 rounded inline-block font-mono border border-gray-200/60">
+                        {sub.slug}
+                      </div>
+                    </td>
+                    <td class="px-5 py-2.5 whitespace-nowrap text-right text-sm font-medium">
+                      <div class="flex justify-end gap-3">
+                        <DeleteTutorialSubcategoryButton id={sub.id} name={sub.name} client:load />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {totalPages > 1 && (
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
+              <div class="text-sm text-gray-500">
+                Mostrando <span class="font-medium">{offset + 1}</span> a <span class="font-medium">{Math.min(offset + limit, totalItems)}</span> de <span class="font-medium">{totalItems}</span>
+              </div>
+              <div class="flex space-x-2">
+                <a href={page > 1 ? `?page=${page - 1}` : '#'}
+                  class={`px-3 py-1 border rounded-md text-sm font-medium transition-colors ${page > 1 ? 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'}`}>
+                  Anterior
+                </a>
+                <a href={page < totalPages ? `?page=${page + 1}` : '#'}
+                  class={`px-3 py-1 border rounded-md text-sm font-medium transition-colors ${page < totalPages ? 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'}`}>
+                  Siguiente
+                </a>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  </div>
+
+</AdminLayout>

@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.tsx";
+import Slider from "../components/Slider.tsx";
+import Categories from "../components/Categories.astro";
+import ClientsSlider from "../components/ClientsSlider.astro";
+---
+
+<Layout>
+	<Header client:load />
+	<Slider client:load />
+	
+	<main>
+		<Categories />
+		<ClientsSlider />
+	</main>
+</Layout>

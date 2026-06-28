@@ -5,16 +5,36 @@ import EditProductModal from "../../../components/admin/EditProductModal.tsx";
 import DeleteProductButton from "../../../components/admin/DeleteProductButton.tsx";
 import { db } from "../../../db";
 import { subcategories, products } from "../../../db/schema";
-import { desc, count, eq } from "drizzle-orm";
+import { desc, count, eq, ilike, or } from "drizzle-orm";
 
 const pageParam = Astro.url.searchParams.get("page");
+const searchQuery = Astro.url.searchParams.get("search") || "";
+const searchParam = searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : "";
 const page = pageParam ? parseInt(pageParam, 10) : 1;
-const limit = 5;
+const limit = 10;
 const offset = (page - 1) * limit;
 
-const totalItemsResult = await db.select({ value: count() }).from(products);
+const conditions = searchQuery 
+  ? or(
+      ilike(products.name, `%${searchQuery}%`),
+      ilike(products.sku, `%${searchQuery}%`),
+      ilike(products.brand, `%${searchQuery}%`),
+      ilike(products.model, `%${searchQuery}%`)
+    )
+  : undefined;
+
+const totalItemsResult = await db.select({ value: count() }).from(products).where(conditions);
 const totalItems = totalItemsResult[0].value;
-const totalPages = Math.ceil(totalItems / limit);
+const totalPages = Math.ceil(totalItems / limit) || 1;
+
+// Generar el rango de paginación
+function getPagination(currentPage: number, totalPages: number) {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+  if (currentPage <= 4) return [1, 2, 3, 4, 5, '...', totalPages];
+  if (currentPage >= totalPages - 3) return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+  return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+}
+const paginationRange = getPagination(page, totalPages);
 
 const allSubcategories = await db.select().from(subcategories).orderBy(desc(subcategories.id));
 
@@ -24,6 +44,7 @@ const dbProducts = await db.select({
 })
   .from(products)
   .leftJoin(subcategories, eq(products.subcategoryId, subcategories.id))
+  .where(conditions)
   .orderBy(desc(products.id))
   .limit(limit)
   .offset(offset);
@@ -37,9 +58,27 @@ const dbProducts = await db.select({
   </div>
 
   <div class="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
-      <h3 class="text-base font-semibold text-slate-800">Productos Actuales ({totalItems})</h3>
-      <CreateProductModal subcategories={allSubcategories} client:load />
+    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <h3 class="text-base font-semibold text-slate-800 whitespace-nowrap">Productos Actuales ({totalItems})</h3>
+      
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+        <form method="GET" action="/admin/productos" class="w-full sm:w-72 relative">
+          <input 
+            type="text" 
+            name="search" 
+            value={searchQuery}
+            placeholder="Buscar producto, SKU, marca..."
+            class="w-full pl-9 pr-8 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#f04f23] focus:ring-1 focus:ring-[#f04f23] transition-colors"
+          />
+          <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          {searchQuery && (
+            <a href="/admin/productos" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-0.5 transition-colors">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </a>
+          )}
+        </form>
+        <CreateProductModal subcategories={allSubcategories} client:only="react" />
+      </div>
     </div>
     
     <div class="p-0">
@@ -93,7 +132,23 @@ const dbProducts = await db.select({
                   </td>
                   <td class="px-5 py-2.5 whitespace-nowrap text-right text-sm font-medium">
                     <div class="flex justify-end gap-3">
-                      <EditProductModal product={product} subcategories={allSubcategories} client:load />
+                      <EditProductModal 
+                        product={{
+                          id: product.id,
+                          name: product.name,
+                          subcategoryId: product.subcategoryId,
+                          sku: product.sku,
+                          brand: product.brand,
+                          model: product.model || undefined,
+                          description: product.description || undefined,
+                          isAvailable: product.isAvailable,
+                          imageUrl: product.imageUrl,
+                          galleryUrls: product.galleryUrls,
+                          pdfUrl: product.pdfUrl || undefined
+                        }} 
+                        subcategories={allSubcategories} 
+                        client:only="react" 
+                      />
                       <DeleteProductButton id={product.id} name={product.name} client:load />
                     </div>
                   </td>
@@ -105,34 +160,52 @@ const dbProducts = await db.select({
         
         {/* Paginación */}
         {totalPages > 1 && (
-          <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
+          <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between flex-wrap gap-4">
             <div class="text-sm text-gray-500">
               Mostrando <span class="font-medium">{offset + 1}</span> a <span class="font-medium">{Math.min(offset + limit, totalItems)}</span> de <span class="font-medium">{totalItems}</span> productos
             </div>
-            <div class="flex space-x-2">
+            
+            <div class="flex items-center gap-1.5">
               <a 
-                href={page > 1 ? `?page=${page - 1}` : '#'} 
-                class={`px-3 py-1 border rounded-md text-sm font-medium transition-colors ${page > 1 ? 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'}`}
+                href={page > 1 ? `?page=${page - 1}${searchParam}` : '#'} 
+                class={`flex items-center justify-center w-8 h-8 rounded-md border text-sm transition-all duration-300 ${page > 1 ? 'bg-white border-gray-200 text-gray-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 shadow-sm hover:-translate-y-0.5' : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed pointer-events-none'}`}
+                aria-label="Página anterior"
               >
-                Anterior
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
               </a>
               
-              <div class="flex space-x-1 items-center px-2">
-                {Array.from({ length: totalPages }).map((_, i) => (
-                  <a 
-                    href={`?page=${i + 1}`}
-                    class={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${page === i + 1 ? 'bg-[#f04f23] text-white' : 'text-gray-600 hover:bg-gray-100'}`}
-                  >
-                    {i + 1}
-                  </a>
-                ))}
+              <div class="flex items-center gap-1">
+                {paginationRange.map((p, index) => {
+                  if (p === '...') {
+                    return <span class="w-8 h-8 flex items-center justify-center text-gray-400 font-serif tracking-widest text-sm">...</span>;
+                  }
+                  const isCurrent = p === page;
+                  return (
+                    <a 
+                      href={`?page=${p}${searchParam}`} 
+                      class={`w-8 h-8 flex items-center justify-center rounded-md text-[13px] font-medium transition-all duration-300 ${
+                        isCurrent 
+                          ? 'bg-[#f04f23] text-white shadow-[0_2px_8px_rgba(240,79,35,0.35)] hover:-translate-y-0.5' 
+                          : 'bg-white border border-gray-200 text-gray-600 hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm hover:-translate-y-0.5'
+                      }`}
+                      aria-current={isCurrent ? 'page' : undefined}
+                    >
+                      {p}
+                    </a>
+                  );
+                })}
               </div>
 
               <a 
-                href={page < totalPages ? `?page=${page + 1}` : '#'} 
-                class={`px-3 py-1 border rounded-md text-sm font-medium transition-colors ${page < totalPages ? 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'}`}
+                href={page < totalPages ? `?page=${page + 1}${searchParam}` : '#'} 
+                class={`flex items-center justify-center w-8 h-8 rounded-md border text-sm transition-all duration-300 ${page < totalPages ? 'bg-white border-gray-200 text-gray-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 shadow-sm hover:-translate-y-0.5' : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed pointer-events-none'}`}
+                aria-label="Página siguiente"
               >
-                Siguiente
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
               </a>
             </div>
           </div>

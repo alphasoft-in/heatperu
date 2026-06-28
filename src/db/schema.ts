@@ -23,8 +23,12 @@ export const products = pgTable('products', {
   slug: text('slug').notNull().unique(),
   sku: text('sku').notNull(),
   brand: text('brand').notNull(),
+  model: text('model'),
+  description: text('description'),
   isAvailable: boolean('is_available').default(true).notNull(),
   imageUrl: text('image_url').notNull(),
+  galleryUrls: text('gallery_urls').default('[]').notNull(),
+  pdfUrl: text('pdf_url'),
 });
 
 export const services = pgTable('services', {
@@ -46,8 +50,25 @@ export const projects = pgTable('projects', {
   order: integer('order').default(0).notNull(),
 });
 
+export const tutorialCategories = pgTable('tutorial_categories', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  imageUrl: text('image_url').notNull(),
+  order: integer('order').default(0).notNull(),
+});
+
+export const tutorialSubcategories = pgTable('tutorial_subcategories', {
+  id: serial('id').primaryKey(),
+  categoryId: integer('category_id').references(() => tutorialCategories.id).notNull(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  order: integer('order').default(0).notNull(),
+});
+
 export const tutorials = pgTable('tutorials', {
   id: serial('id').primaryKey(),
+  subcategoryId: integer('subcategory_id').references(() => tutorialSubcategories.id),
   title: text('title').notNull(),
   slug: text('slug'),
   description: text('description').notNull(),

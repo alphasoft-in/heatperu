@@ -1,0 +1,216 @@
+{
+	"version": 3,
+	"routes": [
+		{
+			"handle": "filesystem"
+		},
+		{
+			"src": "^/_astro/(.*)$",
+			"headers": {
+				"cache-control": "public, max-age=31536000, immutable"
+			},
+			"continue": true
+		},
+		{
+			"src": "^/_server-islands/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/_image/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/categorias/editar/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/categorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/productos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/proyectos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/reclamaciones/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/servicios/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/subcategorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/suscriptores/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/tutoriales/categorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/tutoriales/subcategorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/tutoriales/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/admin/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/categorias/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/categorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/productos/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/productos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/proyectos/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/proyectos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/reclamaciones/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/servicios/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/servicios/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/subcategorias/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/subcategorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/suscriptores/exportar/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/tutorial-categorias/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/tutorial-categorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/tutorial-subcategorias/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/admin/tutorial-subcategorias/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/reclamaciones/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/suscribir/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/tutorials/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/tutorials/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/buscar/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/categorias/actuadores/modulacion-electronica/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/categorias/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/contacto/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/libro-reclamaciones/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/nosotros/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/productos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/proyectos/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/proyectos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/servicios/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/tutoriales/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/tutoriales/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/tutoriales/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/404/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/.*$",
+			"dest": "_render",
+			"status": 404
+		}
+	]
+}
