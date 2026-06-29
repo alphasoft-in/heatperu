@@ -72,7 +72,7 @@ const dbCategories = await db.select().from(categories).orderBy(desc(categories.
         <h3 class="text-white font-bold text-[17px] mb-4">Suscríbete</h3>
         <form id="newsletterForm" class="flex shadow-lg shadow-[#f04f23]/20 ring-2 ring-[#f04f23]/40 rounded-md transition-shadow hover:shadow-[#f04f23]/40 relative">
           <input type="email" id="newsletterEmail" placeholder="Email para el boletín..." required class="flex-1 px-4 py-3.5 text-[14px] bg-white text-gray-900 border-0 focus:ring-0 outline-none rounded-l-md" />
-          <button type="submit" id="newsletterBtn" aria-label="Suscribirse" class="bg-[#f04f23] text-white px-5 py-3.5 rounded-r-md hover:bg-[#d0421c] transition-colors flex items-center justify-center min-w-[64px]">
+          <button type="submit" id="newsletterBtn" aria-label="Suscribirse" class="bg-[#f04f23] text-white px-5 py-3.5 rounded-r-md hover:bg-[#d0421c] transition-colors flex items-center justify-center min-w-[64px] cursor-pointer">
             <svg id="newsletterIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 2L11 13"></path>
               <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>

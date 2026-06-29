@@ -53,7 +53,7 @@ export default function Slider() {
         {/* Left Arrow */}
         <button 
           onClick={prevSlide}
-          className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 text-[#f04f23] hover:bg-orange-50 p-2 rounded-full transition-colors z-10"
+          className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 text-[#f04f23] hover:bg-orange-50 p-2 rounded-full transition-colors z-10 cursor-pointer"
           aria-label="Anterior"
         >
           <FiChevronLeft className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1.5} />
@@ -62,7 +62,7 @@ export default function Slider() {
         {/* Right Arrow */}
         <button 
           onClick={nextSlide}
-          className="absolute top-1/2 -translate-y-1/2 right-2 md:right-8 text-[#f04f23] hover:bg-orange-50 p-2 rounded-full transition-colors z-10"
+          className="absolute top-1/2 -translate-y-1/2 right-2 md:right-8 text-[#f04f23] hover:bg-orange-50 p-2 rounded-full transition-colors z-10 cursor-pointer"
           aria-label="Siguiente"
         >
           <FiChevronRight className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1.5} />
