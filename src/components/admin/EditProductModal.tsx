@@ -14,8 +14,10 @@ type Product = {
   brand: string;
   isAvailable: boolean;
   imageUrl: string;
-  model?: string;
-  description?: string;
+  model?: string | null;
+  description?: string | null;
+  galleryUrls?: string | null;
+  pdfUrl?: string | null;
 };
 
 export default function EditProductModal({ 

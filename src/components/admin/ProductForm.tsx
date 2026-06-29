@@ -10,10 +10,10 @@ type InitialData = {
   brand: string;
   isAvailable: boolean;
   imageUrl: string;
-  galleryUrls?: string;
-  pdfUrl?: string;
-  model?: string;
-  description?: string;
+  galleryUrls?: string | null;
+  pdfUrl?: string | null;
+  model?: string | null;
+  description?: string | null;
 };
 
 type Subcategory = {
