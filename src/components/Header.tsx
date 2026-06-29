@@ -22,7 +22,7 @@ export default function Header() {
 
   const getDesktopLinkClass = (path: string) => {
     const isActive = path === '/' ? currentPath === '/' : currentPath.startsWith(path);
-    return `transition-colors ${isActive ? 'text-[#f04f23]' : 'text-white hover:text-[#f04f23]'}`;
+    return `transition-colors ${isActive ? 'text-[#ff7b00]' : 'text-white hover:text-[#ff7b00]'}`;
   };
 
   const getMobileLinkClass = (path: string) => {
