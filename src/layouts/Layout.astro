@@ -5,12 +5,16 @@ export interface Props {
   title?: string;
   description?: string;
   image?: string;
+  keywords?: string;
 }
+
+const defaultKeywords = "quemadores peru, quemadores de gas y petroleo peru, quemadores de gas industriales, quemadores de petroleo industriales, quemadores baite, quemadores baltur, quemadores power flame, quemadores de gas baite, quemadores de petroleo baite, quemadores duales power flame, repuesto de quemadores peru, repuesto de calderas peru, valvulas para calderas, valvulas kunkle, valvulas de seguridad kunkle, bomba de agua para calderas, valvulas united brass, valvulas reguladoras de presion, reguladores de presion, reguladores de presion de vapor, reguladores united brass, valvulas everlasting, valvula de purga para calderas, valvula de purga united brass, valvulas para purga de calderas, manometros, termometros, bomba de petroleo, bomba de petroleo suntec, bomba suntec, sistemas de combustion, reparacion de calderas, empaquetaduras para calderas, empaquetaduras topog, columnas de nivel de agua peru, mcdonnell miller peru, honeywell peru, siemens peru, programadores honeywell, programadores siemens, resina cationica, resina cationica lewatit, valvulas para gas, reguladores de presion de gas, reguladores de gas, quemador wayne peru, quemador beckett peru, quemador de gas wayne, quemador de petroleo beckett, toberas para quemadores, toberas para ablandadores, transformadores de ignicion, transformadores allanson, controles para hornos y calderas, mantenimiento de calderas, calderas industriales para biogas, calderas industriales para industria textil, calderas industriales para mineria, instalacion de sistemas de combustion, instalacion de sistema slate honeywell, quemadores duales gas y petroleo, conversion de calderas a gas natural, conversion de calderas a biogas, quemadores de tiro forzado, proveedores de repuestos para calderas, proveedores de quemadores industriales, proveedores de valvulas para calderas, valvulas de paso ondulado, valvulas de paso ondulado peru, valvulas apollo, valvulas de bola, servomotores para quemador, proveedores de calderas, proveedores de repuestos y valvulas, repuestos de quemador power flame, repuestos de quemador baite, repuestos de quemador beckett, valvulas check united brass, valvulas de purga united brass, valvulas reguladoras united brass, united brass peru, topog peru";
 
 const { 
   title = "Heat Factory - Alta Tecnología en Calderas y Quemadores",
   description = "Especialistas en venta, mantenimiento y automatización de calderas y quemadores industriales en Perú. Más de 10 años de experiencia.",
-  image = "/bc-servicios.jpeg"
+  image = "/bc-servicios.jpeg",
+  keywords = defaultKeywords
 } = Astro.props;
 ---
 <!doctype html>
@@ -25,6 +29,7 @@ const {
 		<title>{title}</title>
 		<meta name="title" content={title} />
 		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords} />
 
 		<!-- Open Graph / Facebook / WhatsApp -->
 		<meta property="og:type" content="website" />
