@@ -46,7 +46,7 @@ const countsMap = Object.fromEntries(tutorialCountsRaw.map((r) => [r.categoryId,
           const tutCount = countsMap[cat.id] ?? 0;
           return (
             <a
-              href={`/tutoriales/${cat.slug}`}
+              href={`/tutoriales/categoria/${cat.slug}`}
               class="group bg-white rounded-xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col hover:shadow-[0_12px_40px_rgba(0,0,0,0.10)] transition-all duration-500"
             >
               <div class="relative w-full h-52 bg-white overflow-hidden flex items-center justify-center border-b border-gray-100 p-8">
