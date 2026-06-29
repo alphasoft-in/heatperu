@@ -103,7 +103,11 @@ const decodedDesc = decodeHtml(product.description);
 const descriptionHtml = marked.parse(decodedDesc, { breaks: true, gfm: true });
 ---
 
-<Layout>
+<Layout 
+  title={`${product.name} | Heat Factory`}
+  description={product.description ? product.description.substring(0, 160) : `Encuentra ${product.name} y más equipos industriales en Heat Factory.`}
+  image={product.imageUrl}
+>
   <Header client:load />
   
   <PageHeader 

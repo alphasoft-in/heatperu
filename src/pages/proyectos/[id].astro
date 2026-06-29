@@ -51,7 +51,11 @@ try {
 const displayImage = gallery.length > 0 ? gallery[0] : project.imageUrl;
 ---
 
-<Layout>
+<Layout 
+  title={`Proyecto: ${project.title} | Heat Factory`}
+  description={project.description ? project.description.substring(0, 160) : `Detalles del proyecto ${project.title} realizado por Heat Factory.`}
+  image={project.imageUrl}
+>
   <Header client:load />
   
   <PageHeader 

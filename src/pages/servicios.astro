@@ -9,7 +9,10 @@ import { asc } from "drizzle-orm";
 const dbServices = await db.select().from(services).orderBy(asc(services.order), asc(services.id));
 ---
 
-<Layout>
+<Layout 
+  title="Servicios y Mantenimiento | Heat Factory"
+  description="Mantenimiento preventivo, correctivo y automatización de sistemas térmicos. Servicio técnico especializado 24/7 en todo el Perú."
+>
   <Header client:load />
   
   <PageHeader 

@@ -56,7 +56,11 @@ const videoId = getYouTubeId(tutorial.videoUrl);
 const thumbnailUrl = tutorial.imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '/placeholder.png');
 ---
 
-<Layout>
+<Layout 
+  title={`${tutorial.title} | Tutorial | Heat Factory`}
+  description={tutorial.description ? tutorial.description.substring(0, 160) : `Tutorial sobre ${tutorial.title} en Heat Factory.`}
+  image={tutorial.imageUrl}
+>
   <Header client:load />
   
   <PageHeader 
