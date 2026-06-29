@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const slides = [
-  { id: 1, imageUrl: '/slide_wayne.webp', alt: 'Wayne' },
-  { id: 2, imageUrl: '/slide_becket.webp', alt: 'Becket' },
-  { id: 3, imageUrl: '/slide_honeywell.webp', alt: 'Honeywell' },
-  { id: 4, imageUrl: '/slide_mcdonnell.webp', alt: 'McDonnell' },
-  { id: 5, imageUrl: '/slide_suntec.webp', alt: 'Suntec' },
-  { id: 6, imageUrl: '/slide_belgas.webp', alt: 'Belgas' },
-  { id: 7, imageUrl: '/slide_pf.webp', alt: 'PF' },
-  { id: 8, imageUrl: '/slide_vmv.webp', alt: 'VMV' },
-  { id: 9, imageUrl: '/slide_baite.webp', alt: 'Baite' }
+  { id: 1, imageUrl: '/sliders/slide_wayne.png', alt: 'Wayne' },
+  { id: 2, imageUrl: '/sliders/slide_becket.png', alt: 'Becket' },
+  { id: 3, imageUrl: '/sliders/slide_honeywell.png', alt: 'Honeywell' },
+  { id: 4, imageUrl: '/sliders/slide_mcdonell.png', alt: 'McDonnell' },
+  { id: 5, imageUrl: '/sliders/slide_siemens.png', alt: 'Siemens' },
+  { id: 6, imageUrl: '/sliders/slide_belgas.png', alt: 'Belgas' },
+  { id: 7, imageUrl: '/sliders/slide_armstrong.png', alt: 'Armstrong' },
+  { id: 8, imageUrl: '/sliders/slide_vmv.png', alt: 'VMV' },
+  { id: 9, imageUrl: '/sliders/slide_baite.png', alt: 'Baite' },
+  { id: 10, imageUrl: '/sliders/slide_united.png', alt: 'United Brass' }
 ];
 
 export default function Slider() {
