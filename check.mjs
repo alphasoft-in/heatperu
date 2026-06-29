@@ -1,0 +1,1 @@
+import { db } from './src/db/index.js'; import { tutorialCategories, tutorials } from './src/db/schema.js'; async function check() { try { const cats = await db.select().from(tutorialCategories); const tuts = await db.select().from(tutorials); console.log('Categories:', cats.length); console.log('Tutorials:', tuts.length); } catch (e) { console.error(e); } } check();  
