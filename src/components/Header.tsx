@@ -99,7 +99,7 @@ export default function Header() {
 
       {/* Desktop Bottom Nav */}
       <nav className="hidden md:block w-full bg-[#1e1a17] relative z-40">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-center py-4 px-8 space-x-6 lg:space-x-10 text-xs lg:text-sm font-semibold tracking-wide">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-center py-4 px-8 space-x-6 lg:space-x-10 text-sm lg:text-base font-semibold tracking-wide">
           {navLinks.map((link) => (
             <a key={link.path} href={link.path} className={getDesktopLinkClass(link.path)}>
               {link.name}
