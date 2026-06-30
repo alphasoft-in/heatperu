@@ -1,1 +1,0 @@
-import { db } from './src/db/index.ts'; import { tutorialCategories, tutorials } from './src/db/schema.ts'; async function check() { try { const tuts = await db.select().from(tutorials); console.log(tuts); process.exit(0); } catch (e) { console.error(e); process.exit(1); } } check();  

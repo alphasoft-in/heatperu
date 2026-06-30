@@ -37,13 +37,12 @@ const dbSubcategorias = await db.select().from(subcategories).where(eq(subcatego
   <PageHeader 
     title={category.name.toUpperCase()}
     breadcrumbs={[
-      { name: "INICIO", url: "/" },
-      { name: category.name.toUpperCase() }
+      { name: "INICIO", url: "/" }
     ]}
     bgImage="/productos/bc-productos.webp"
   />
 
-  <main class="max-w-[1000px] mx-auto py-16 px-4 md:px-8">
+  <main class="max-w-[1000px] mx-auto pt-6 pb-2 md:py-16 px-4 md:px-8">
     
     {dbSubcategorias.length > 0 ? (
       <div class="flex flex-wrap justify-center gap-6 lg:gap-8">

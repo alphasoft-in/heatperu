@@ -6,34 +6,34 @@ import Header from "../components/Header.tsx";
 <Layout>
   <Header client:load />
 
-  <main class="max-w-[1000px] mx-auto pt-8 pb-16 px-4 md:px-8">
+  <main class="max-w-[1000px] mx-auto pt-8 pb-6 md:pb-16 px-4 md:px-8">
     
-    <div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 md:p-12">
+    <div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-5 sm:p-8 md:p-12">
       <div class="mb-10 border-b border-slate-100 pb-8 flex flex-col md:flex-row items-center gap-6">
         <div class="flex-shrink-0">
           {/* Libro de Reclamaciones Icon */}
-          <div class="w-24 h-24 bg-slate-50 border-2 border-slate-200 rounded-xl flex items-center justify-center relative overflow-hidden shadow-sm">
-            <div class="absolute top-0 left-0 w-full h-4 bg-[#f04f23]"></div>
-            <svg class="w-12 h-12 text-[#0d1624] mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <div class="w-16 h-16 md:w-24 md:h-24 bg-slate-50 border-2 border-slate-200 rounded-xl flex items-center justify-center relative overflow-hidden shadow-sm">
+            <div class="absolute top-0 left-0 w-full h-2.5 md:h-4 bg-[#f04f23]"></div>
+            <svg class="w-8 h-8 md:w-12 md:h-12 text-[#0d1624] mt-1.5 md:mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
           </div>
         </div>
-        <div>
-          <h2 class="text-[20px] font-black text-[#0d1624] tracking-tight uppercase mb-2">Libro de Reclamaciones Virtual</h2>
-          <p class="text-slate-600 text-[14px] leading-relaxed">
+        <div class="text-center md:text-left w-full">
+          <h2 class="text-[18px] md:text-[20px] font-black text-[#0d1624] tracking-tight uppercase mb-2">Libro de Reclamaciones Virtual</h2>
+          <p class="text-slate-600 text-[12px] md:text-[14px] leading-relaxed">
             Conforme a lo establecido en el Código de Protección y Defensa del Consumidor, contamos con un Libro de Reclamaciones a tu disposición. Llena el siguiente formulario y te responderemos a la brevedad posible.
           </p>
-          <div class="mt-4 flex flex-col sm:flex-row gap-4 text-[13px]">
+          <div class="mt-4 flex flex-col sm:flex-row justify-center md:justify-start items-center sm:items-stretch gap-3 md:gap-4 text-[11px] md:text-[13px]">
             <span class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-md font-semibold">RUC: 20613311808</span>
             <span class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-md font-semibold">Razón Social: GRUPO EMPRESARIAL ZEVALLOS S.A.C.</span>
           </div>
         </div>
       </div>
 
-      <form id="complaintForm" class="space-y-12">
+      <form id="complaintForm" class="space-y-8 md:space-y-12">
         {/* Sección 1: Datos del Consumidor */}
         <section>
-          <h3 class="flex items-center text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
-            <span class="bg-[#f04f23] text-white w-6 h-6 rounded-full flex items-center justify-center text-[13px] mr-3">1</span>
+          <h3 class="flex flex-col md:flex-row items-center text-center md:text-left text-[14px] md:text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
+            <span class="bg-[#f04f23] text-white w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[13px] mb-2 md:mb-0 mr-0 md:mr-3">1</span>
             Identificación del Consumidor Reclamante
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -72,8 +72,8 @@ import Header from "../components/Header.tsx";
 
         {/* Sección 2: Identificación del Bien */}
         <section>
-          <h3 class="flex items-center text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
-            <span class="bg-[#f04f23] text-white w-6 h-6 rounded-full flex items-center justify-center text-[13px] mr-3">2</span>
+          <h3 class="flex flex-col md:flex-row items-center text-center md:text-left text-[14px] md:text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
+            <span class="bg-[#f04f23] text-white w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[13px] mb-2 md:mb-0 mr-0 md:mr-3">2</span>
             Identificación del Bien Contratado
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,9 +98,9 @@ import Header from "../components/Header.tsx";
 
         {/* Sección 3: Detalle de la Reclamación */}
         <section>
-          <h3 class="flex items-center text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
-            <span class="bg-[#f04f23] text-white w-6 h-6 rounded-full flex items-center justify-center text-[13px] mr-3">3</span>
-            Detalle de la Reclamación y Pedido
+          <h3 class="flex flex-col md:flex-row items-center text-center md:text-left text-[14px] md:text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
+            <span class="bg-[#f04f23] text-white w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[13px] mb-2 md:mb-0 mr-0 md:mr-3">3</span>
+            Detalle de la Reclamación y Pedido del Consumidor
           </h3>
           <div class="grid grid-cols-1 gap-6">
             <div>
@@ -136,8 +136,8 @@ import Header from "../components/Header.tsx";
         </section>
 
         {/* Políticas y Envío */}
-        <div class="pt-6 border-t border-slate-100">
-          <label class="flex items-start gap-3 mb-8 cursor-pointer">
+        <div class="pt-4 md:pt-6 border-t border-slate-100">
+          <label class="flex items-start gap-3 mb-6 md:mb-8 cursor-pointer">
             <input type="checkbox" required class="mt-1 w-4 h-4 text-[#f04f23] bg-slate-50 border-slate-300 rounded focus:ring-[#f04f23]" />
             <span class="text-[13px] text-slate-600 leading-relaxed">
               Declaro que los datos consignados son correctos y fieles a la verdad. Asimismo, acepto las <button type="button" onclick="document.getElementById('privacyModal').showModal()" class="text-[#f04f23] underline hover:text-[#d0421c]">Políticas de Privacidad</button> para el tratamiento de mis datos personales en la gestión de esta reclamación.
@@ -153,9 +153,9 @@ import Header from "../components/Header.tsx";
           </div>
 
           <div class="flex justify-end">
-            <button id="submitBtn" type="submit" class="bg-[#0d1624] text-white font-bold text-[15px] py-4 px-10 rounded-xl shadow-lg hover:bg-[#1a2538] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer">
+            <button id="submitBtn" type="submit" class="w-full sm:w-auto bg-[#0d1624] text-white font-bold text-[13px] md:text-[15px] py-3 md:py-4 px-6 md:px-10 rounded-xl shadow-lg hover:bg-[#1a2538] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 cursor-pointer">
               <span id="submitText">Enviar Reclamo / Queja</span>
-              <svg id="submitIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              <svg id="submitIcon" class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
           </div>
         </div>
@@ -215,20 +215,20 @@ import Header from "../components/Header.tsx";
 
     {/* Modal de Políticas de Privacidad */}
     <dialog id="privacyModal" class="bg-white rounded-2xl shadow-2xl p-0 w-[90%] max-w-2xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 border-0 z-50">
-      <div class="p-6 md:p-8 max-h-[85vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-[20px] font-bold text-[#0d1624]">Políticas de Privacidad</h3>
+      <div class="p-4 sm:p-5 md:p-8 max-h-[85vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-3 md:mb-6">
+          <h3 class="text-[18px] md:text-[20px] font-bold text-[#0d1624]">Políticas de Privacidad</h3>
           <button type="button" onclick="document.getElementById('privacyModal').close()" class="text-slate-400 hover:text-[#f04f23] transition-colors focus:outline-none">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
-        <div class="text-[14px] text-slate-600 leading-relaxed space-y-4">
+        <div class="text-[12px] md:text-[14px] text-slate-600 leading-snug md:leading-relaxed space-y-2.5 md:space-y-4">
           <p>De conformidad con la Ley N° 29733, Ley de Protección de Datos Personales, el usuario otorga su consentimiento expreso para que los datos personales que facilite en este formulario queden incorporados en el Banco de Datos de <strong>GRUPO EMPRESARIAL ZEVALLOS S.A.C.</strong></p>
           <p>Estos datos serán tratados de forma estrictamente confidencial con la finalidad única de gestionar su reclamo o queja, contactarlo para brindarle una respuesta oportuna y llevar un registro estadístico de atención al cliente.</p>
           <p>Usted puede ejercer en cualquier momento sus derechos de acceso, rectificación, cancelación y oposición de sus datos personales comunicándose a nuestro correo electrónico oficial: <strong>privacidad@heatperu.com</strong>.</p>
         </div>
-        <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-          <button type="button" onclick="document.getElementById('privacyModal').close()" class="bg-[#0d1624] text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-[#1a2538] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d1624] cursor-pointer">
+        <div class="mt-4 md:mt-8 pt-4 md:pt-6 border-t border-slate-100 flex justify-end">
+          <button type="button" onclick="document.getElementById('privacyModal').close()" class="bg-[#0d1624] text-white px-5 md:px-6 py-2 md:py-2.5 text-[13px] md:text-[14px] rounded-xl font-semibold hover:bg-[#1a2538] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d1624] cursor-pointer">
             Entendido
           </button>
         </div>

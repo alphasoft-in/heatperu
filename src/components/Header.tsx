@@ -46,9 +46,9 @@ export default function Header() {
         <div className="max-w-[1400px] mx-auto flex items-center justify-between py-4 px-4 md:py-6 md:px-8">
           
           {/* Logo Area */}
-          <div className="flex items-center">
+          <a href="/" className="flex items-center">
             <img src="/logoheat.png" alt="Heat Factory" className="h-16 md:h-24 object-contain" />
-          </div>
+          </a>
 
           {/* Desktop Search Bar */}
           <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl mx-12">

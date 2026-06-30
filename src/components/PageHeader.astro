@@ -9,7 +9,7 @@ export interface Props {
 const { title, breadcrumbs, bgImage = "/banner_bg.jpg", bgPosition = "object-center" } = Astro.props;
 ---
 
-<div class="relative w-full min-h-[220px] md:min-h-[280px] flex flex-col items-center justify-center bg-[#070c13] overflow-hidden group">
+<div class="relative w-full min-h-[120px] md:min-h-[280px] flex flex-col items-center justify-center bg-[#070c13] overflow-hidden group">
   
   {/* Imagen con zoom sutil cinematográfico */}
   <div class="absolute inset-0 z-0">
@@ -26,30 +26,32 @@ const { title, breadcrumbs, bgImage = "/banner_bg.jpg", bgPosition = "object-cen
   <div class="absolute inset-0 bg-black/10 mix-blend-multiply z-0 pointer-events-none"></div>
 
   {/* Contenido */}
-  <div class="relative z-10 flex flex-col items-center text-center px-4 pt-10 md:pt-12 pb-16 md:pb-24 w-full max-w-4xl mx-auto transform translate-y-4 animate-fade-in-up">
+  <div class="relative z-10 flex flex-col items-center text-center px-4 pt-4 md:pt-12 pb-4 md:pb-24 w-full max-w-4xl mx-auto transform translate-y-2 md:translate-y-4 animate-fade-in-up">
     
-    {/* Breadcrumbs Premium */}
-    <div class="text-[11px] md:text-[12px] font-semibold tracking-[0.2em] uppercase flex flex-wrap justify-center items-center text-slate-300 mb-2 md:mb-3">
-      {breadcrumbs.map((crumb, index) => (
-        <>
-          <span class="inline-flex items-center">
-            {crumb.url ? (
-              <a href={crumb.url} class="hover:text-white transition-colors duration-300 relative group/link">
-                {crumb.name}
-                <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#f04f23] group-hover/link:w-full transition-all duration-300"></span>
-              </a>
-            ) : (
-              <span class="text-[#f04f23] font-bold drop-shadow-md">{crumb.name}</span>
+    {/* Breadcrumbs Premium (Ocultos si son muy cortos para evitar redundancia con el título) */}
+    {breadcrumbs.length > 2 && (
+      <div class="text-[9px] sm:text-[10px] md:text-[12px] font-semibold tracking-[0.15em] md:tracking-[0.2em] uppercase flex flex-wrap justify-center items-center text-slate-300 mb-2 md:mb-3">
+        {breadcrumbs.map((crumb, index) => (
+          <>
+            <span class="inline-flex items-center">
+              {crumb.url ? (
+                <a href={crumb.url} class="hover:text-white transition-colors duration-300 relative group/link">
+                  {crumb.name}
+                  <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#f04f23] group-hover/link:w-full transition-all duration-300"></span>
+                </a>
+              ) : (
+                <span class="text-[#f04f23] drop-shadow-sm">{crumb.name}</span>
+              )}
+            </span>
+            {index < breadcrumbs.length - 1 && (
+              <span class="mx-2 md:mx-3 text-slate-400 font-light">/</span>
             )}
-          </span>
-          {index < breadcrumbs.length - 1 && (
-            <span class="mx-3 text-slate-500 font-light text-sm">/</span>
-          )}
-        </>
-      ))}
-    </div>
+          </>
+        ))}
+      </div>
+    )}
 
-    <h1 class="text-xl md:text-2xl lg:text-[28px] font-semibold text-white uppercase tracking-wide leading-snug mb-6 drop-shadow-2xl">
+    <h1 class="text-[15px] sm:text-[17px] md:text-2xl lg:text-[28px] font-semibold text-white uppercase tracking-wide leading-snug mb-3 md:mb-6 drop-shadow-2xl">
       {title}
     </h1>
     

@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="es">
+<html lang="es" class="overflow-x-hidden w-full">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -46,7 +46,7 @@ const {
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={new URL(image, Astro.url)} />
 	</head>
-	<body>
+	<body class="overflow-x-hidden w-full">
 		<slot />
 		<Footer />
 		

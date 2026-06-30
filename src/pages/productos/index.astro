@@ -21,12 +21,12 @@ const allProducts = await db.select()
   .limit(ITEMS_PER_PAGE)
   .offset(offset);
 
-// Generar el rango de paginación
+// Generar el rango de paginación (Máximo 5 elementos para verse mejor en móviles: 1 2 3 ... 35)
 function getPagination(currentPage: number, totalPages: number) {
-  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
-  if (currentPage <= 4) return [1, 2, 3, 4, 5, '...', totalPages];
-  if (currentPage >= totalPages - 3) return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-  return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+  if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+  if (currentPage <= 3) return [1, 2, 3, '...', totalPages];
+  if (currentPage >= totalPages - 2) return [1, '...', totalPages - 2, totalPages - 1, totalPages];
+  return [1, '...', currentPage, '...', totalPages];
 }
 const paginationRange = getPagination(page, totalPages);
 ---
@@ -46,7 +46,7 @@ const paginationRange = getPagination(page, totalPages);
     bgImage="/productos/bc-productos.webp"
   />
 
-  <main class="max-w-[1400px] mx-auto py-16 px-4 md:px-8 min-h-[50vh]">
+  <main class="max-w-[1400px] mx-auto pt-8 pb-8 md:pb-16 md:py-16 px-4 md:px-8 min-h-[50vh]">
 
 
     {allProducts.length > 0 ? (
@@ -111,31 +111,31 @@ const paginationRange = getPagination(page, totalPages);
       </div>
 
       {totalPages > 1 && (
-        <div class="flex justify-center items-center mt-16 gap-3 flex-wrap">
+        <div class="flex justify-center items-center mt-8 md:mt-16 gap-2 md:gap-3 flex-nowrap w-full px-2">
           {page > 1 ? (
-            <a href={`?page=${page - 1}`} class="flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-white hover:bg-slate-800 hover:border-slate-800 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300" aria-label="Página anterior">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href={`?page=${page - 1}`} class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-white hover:bg-slate-800 hover:border-slate-800 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300" aria-label="Página anterior">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
             </a>
           ) : (
-            <span class="flex items-center justify-center w-11 h-11 rounded-full border border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <span class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
             </span>
           )}
           
-          <div class="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-100/80 rounded-[2rem] shadow-[0_2px_12px_rgba(0,0,0,0.03)] backdrop-blur-sm">
+          <div class="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1.5 md:py-2 bg-white border border-gray-100/80 rounded-[2rem] shadow-[0_2px_12px_rgba(0,0,0,0.03)] backdrop-blur-sm overflow-x-auto flex-nowrap scrollbar-hide" style="scrollbar-width: none;">
             {paginationRange.map((p, index) => {
               if (p === '...') {
-                return <span class="w-10 h-10 flex items-center justify-center text-gray-400 font-serif tracking-widest text-lg">...</span>;
+                return <span class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-gray-400 font-serif tracking-widest text-lg">...</span>;
               }
               const isCurrent = p === page;
               return (
                 <a 
                   href={`?page=${p}`} 
-                  class={`w-10 h-10 flex items-center justify-center rounded-full text-[15px] font-semibold transition-all duration-300 ${
+                  class={`w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full text-[14px] md:text-[15px] font-semibold transition-all duration-300 ${
                     isCurrent 
                       ? 'bg-gradient-to-tr from-[#f04f23] to-[#ff7e5f] text-white shadow-[0_6px_16px_rgba(240,79,35,0.35)] hover:-translate-y-0.5' 
                       : 'text-gray-600 hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm hover:-translate-y-0.5'
@@ -149,14 +149,14 @@ const paginationRange = getPagination(page, totalPages);
           </div>
           
           {page < totalPages ? (
-            <a href={`?page=${page + 1}`} class="flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-white hover:bg-slate-800 hover:border-slate-800 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300" aria-label="Página siguiente">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href={`?page=${page + 1}`} class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-white hover:bg-slate-800 hover:border-slate-800 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300" aria-label="Página siguiente">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </a>
           ) : (
-            <span class="flex items-center justify-center w-11 h-11 rounded-full border border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <span class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </span>

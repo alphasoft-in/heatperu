@@ -50,22 +50,22 @@ const getYouTubeId = (url: string) => {
 ---
 
 <Layout 
-  title="Trabajos para Clientes | Heat Factory"
-  description="Explora nuestros trabajos realizados para clientes en instalación, mantenimiento y operación de equipos térmicos y calderas industriales."
+  title="Tutoriales | Heat Factory"
+  description="Explora nuestros tutoriales en instalación, mantenimiento y operación de equipos térmicos y calderas industriales."
 >
   <Header client:load />
 
   <PageHeader
-    title="TRABAJOS REALIZADOS"
+    title="TUTORIALES"
     breadcrumbs={[
       { name: "INICIO", url: "/" },
-      { name: "CLIENTES" }
+      { name: "TUTORIALES" }
     ]}
     bgImage="/bc-servicios.jpeg"
     bgPosition="object-center"
   />
 
-  <main class="max-w-[1200px] mx-auto pt-8 md:pt-12 pb-16 md:pb-24 px-4 md:px-8">
+  <main class="max-w-[1200px] mx-auto pt-4 md:pt-12 pb-0 md:pb-24 px-4 md:px-8">
 
     {clientsWithTutorials.length === 0 && uncategorizedTutorials.length === 0 ? (
       <div class="text-center py-20 text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
@@ -76,7 +76,7 @@ const getYouTubeId = (url: string) => {
         
         {clientsWithTutorials.length > 0 && (
           <section>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {clientsWithTutorials.map((client) => {
                 const clientTutorials = client.tutorials;
                 if (clientTutorials.length === 0) return null;
@@ -87,19 +87,19 @@ const getYouTubeId = (url: string) => {
 
                 return (
                   <a href={`/tutoriales/cliente/${client.slug}`} class="bg-white rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden flex flex-col group hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-500">
-                    <div class="pt-8 pb-2 px-6 text-center">
-                      <h3 class="text-[17px] md:text-[19px] font-bold text-[#0d1624] uppercase tracking-wide">{client.name}</h3>
+                    <div class="pt-5 md:pt-8 pb-2 px-4 md:px-6 text-center">
+                      <h3 class="text-[15px] md:text-[19px] font-bold text-[#0d1624] uppercase tracking-wide">{client.name}</h3>
                     </div>
-                    <div class="flex-1 w-full flex items-center justify-center p-6 bg-white">
+                    <div class="flex-1 w-full flex items-center justify-center p-4 md:p-6 bg-white">
                       <img 
                         src={thumbnailUrl} 
                         alt={client.name} 
-                        class="w-full h-56 object-contain transition-transform duration-700 group-hover:scale-105"
+                        class="w-full h-40 sm:h-56 object-contain transition-transform duration-700 group-hover:scale-105"
                         onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Cliente'"
                       />
                     </div>
-                    <div class="p-6 pt-2 mt-auto">
-                      <div class="w-full bg-[#1e1c19] text-white text-center font-bold text-[16px] py-3.5 rounded-xl group-hover:bg-black transition-colors shadow-md">
+                    <div class="p-4 md:p-6 pt-2 md:pt-2 mt-auto">
+                      <div class="w-full bg-[#1e1c19] text-white text-center font-bold text-[14px] md:text-[16px] py-2.5 md:py-3.5 rounded-xl group-hover:bg-black transition-colors shadow-md">
                         Ver más
                       </div>
                     </div>
