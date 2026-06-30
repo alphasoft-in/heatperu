@@ -41,7 +41,7 @@ export default function TutorialCategoryForm({ initialData }: { initialData?: In
 
       if (!response.ok) throw new Error(data.error || 'Error al guardar');
 
-      toast.success(initialData ? 'Categoría actualizada' : 'Categoría creada');
+      toast.success(initialData ? 'Cliente actualizado' : 'Cliente creado');
       setTimeout(() => { window.location.href = '/admin/tutoriales/categorias'; }, 1000);
     } catch (err: any) {
       setError(err.message);
@@ -56,11 +56,15 @@ export default function TutorialCategoryForm({ initialData }: { initialData?: In
       {error && <div className="mb-4 bg-red-50 text-red-600 p-3 rounded text-sm">{error}</div>}
 
       <div className="mb-4">
-        <label className="block text-[13px] font-medium text-gray-700 mb-1">Nombre de la Categoría</label>
+        <label className="block text-[13px] font-medium text-gray-700 mb-1">Nombre del Cliente</label>
         <input
-          type="text" value={name} onChange={(e) => setName(e.target.value)} required
-          className="w-full px-3 py-2 text-[13px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f04f23]"
-          placeholder="Ej. Calderas"
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#f04f23] focus:border-transparent transition-all"
+          placeholder="Ej. Heineken Perú"
+          required
         />
       </div>
 
@@ -87,7 +91,7 @@ export default function TutorialCategoryForm({ initialData }: { initialData?: In
 
       <button type="submit" disabled={loading}
         className={`w-full flex justify-center py-2 px-4 rounded-md text-[13px] font-medium text-white bg-[#0d1624] hover:bg-gray-800 cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}>
-        {loading ? 'Guardando...' : (initialData ? 'Actualizar Categoría' : 'Guardar Categoría')}
+        {loading ? 'Guardando...' : (initialData ? 'Actualizar Cliente' : 'Guardar Cliente')}
       </button>
     </form>
   );

@@ -4,13 +4,15 @@ import CreateTutorialModal from "../../../components/admin/CreateTutorialModal.t
 import EditTutorialModal from "../../../components/admin/EditTutorialModal.tsx";
 import DeleteTutorialButton from "../../../components/admin/DeleteTutorialButton.tsx";
 import { db } from "../../../db";
-import { tutorials } from "../../../db/schema";
+import { tutorials, tutorialCategories } from "../../../db/schema";
 import { desc, count, asc } from "drizzle-orm";
 
 const pageParam = Astro.url.searchParams.get("page");
 const page = pageParam ? parseInt(pageParam, 10) : 1;
 const limit = 5;
 const offset = (page - 1) * limit;
+
+const dbCategories = await db.select().from(tutorialCategories);
 
 const totalItemsResult = await db.select({ value: count() }).from(tutorials);
 const totalItems = totalItemsResult[0].value;
@@ -36,7 +38,7 @@ const dbTutorials = await db.select()
   <div class="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
       <h3 class="text-base font-semibold text-slate-800">Tutoriales Actuales ({totalItems})</h3>
-      <CreateTutorialModal nextOrder={nextOrder} client:only="react" />
+      <CreateTutorialModal nextOrder={nextOrder} categories={dbCategories} client:only="react" />
     </div>
     
     <div class="p-0">
@@ -86,7 +88,7 @@ const dbTutorials = await db.select()
                   </td>
                   <td class="px-5 py-2.5 whitespace-nowrap text-right text-sm font-medium">
                     <div class="flex justify-end gap-3">
-                      <EditTutorialModal tutorial={tutorial} client:only="react" />
+                      <EditTutorialModal tutorial={tutorial} categories={dbCategories} client:only="react" />
                       <DeleteTutorialButton id={tutorial.id} title={tutorial.title} client:load />
                     </div>
                   </td>

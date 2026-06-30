@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TutorialForm from './TutorialForm';
 
-export default function EditTutorialModal({ tutorial }: { tutorial: any }) {
+export default function EditTutorialModal({ tutorial, categories = [] }: { tutorial: any, categories?: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function EditTutorialModal({ tutorial }: { tutorial: any }) {
             </div>
             
             <div className="p-0">
-              <TutorialForm tutorial={tutorial} />
+              <TutorialForm tutorial={tutorial} categories={categories} />
             </div>
           </div>
         </div>

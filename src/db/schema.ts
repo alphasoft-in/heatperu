@@ -69,6 +69,7 @@ export const tutorialSubcategories = pgTable('tutorial_subcategories', {
 export const tutorials = pgTable('tutorials', {
   id: serial('id').primaryKey(),
   subcategoryId: integer('subcategory_id').references(() => tutorialSubcategories.id),
+  categoryId: integer('category_id').references(() => tutorialCategories.id),
   title: text('title').notNull(),
   slug: text('slug'),
   description: text('description').notNull(),

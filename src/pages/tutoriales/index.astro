@@ -3,28 +3,28 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.tsx";
 import PageHeader from "../../components/PageHeader.astro";
 import { db } from "../../db";
-import { tutorialCategories, tutorials, tutorialSubcategories } from "../../db/schema";
-import { eq, count, isNull, desc } from "drizzle-orm";
+import { tutorialCategories, tutorials } from "../../db/schema";
+import { eq, isNull, desc, asc } from "drizzle-orm";
 
-// Get all tutorial categories
-const dbCategories = await db.select().from(tutorialCategories).orderBy(tutorialCategories.order, tutorialCategories.id);
+const categories = await db.select().from(tutorialCategories).orderBy(asc(tutorialCategories.order));
 
-// Get tutorial count per category (via subcategories)
-const tutorialCountsRaw = await db.select({
-  categoryId: tutorialSubcategories.categoryId,
-  total: count(tutorials.id),
-})
-  .from(tutorials)
-  .leftJoin(tutorialSubcategories, eq(tutorials.subcategoryId, tutorialSubcategories.id))
-  .groupBy(tutorialSubcategories.categoryId);
-
-const countsMap = Object.fromEntries(tutorialCountsRaw.map((r) => [r.categoryId, r.total]));
+const clientsWithTutorials = await Promise.all(categories.map(async (cat) => {
+  const clientTutorials = await db.select()
+    .from(tutorials)
+    .where(eq(tutorials.categoryId, cat.id))
+    .orderBy(desc(tutorials.executionDate), asc(tutorials.order));
+  
+  return {
+    ...cat,
+    tutorials: clientTutorials
+  };
+}));
 
 // Fetch uncategorized tutorials
 const uncategorizedTutorials = await db.select()
   .from(tutorials)
-  .where(isNull(tutorials.subcategoryId))
-  .orderBy(desc(tutorials.id));
+  .where(isNull(tutorials.categoryId))
+  .orderBy(desc(tutorials.executionDate), asc(tutorials.order));
 
 function formatDate(dateStr: string | null) {
   if (!dateStr) return '';
@@ -50,16 +50,16 @@ const getYouTubeId = (url: string) => {
 ---
 
 <Layout 
-  title="Tutoriales y Guías Técnicas | Heat Factory"
-  description="Aprende con nuestros tutoriales sobre instalación, mantenimiento y operación de equipos térmicos y calderas industriales."
+  title="Trabajos para Clientes | Heat Factory"
+  description="Explora nuestros trabajos realizados para clientes en instalación, mantenimiento y operación de equipos térmicos y calderas industriales."
 >
   <Header client:load />
 
   <PageHeader
-    title="TUTORIALES DE AYUDA"
+    title="TRABAJOS REALIZADOS"
     breadcrumbs={[
       { name: "INICIO", url: "/" },
-      { name: "TUTORIALES" }
+      { name: "CLIENTES" }
     ]}
     bgImage="/bc-servicios.jpeg"
     bgPosition="object-center"
@@ -67,47 +67,40 @@ const getYouTubeId = (url: string) => {
 
   <main class="max-w-[1200px] mx-auto pt-8 md:pt-12 pb-16 md:pb-24 px-4 md:px-8">
 
-    {dbCategories.length === 0 && uncategorizedTutorials.length === 0 ? (
+    {clientsWithTutorials.length === 0 && uncategorizedTutorials.length === 0 ? (
       <div class="text-center py-20 text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-        <p>Aún no hay tutoriales. Estamos trabajando en nuevo contenido.</p>
+        <p>Aún no hay trabajos registrados. Estamos trabajando en nuevo contenido.</p>
       </div>
     ) : (
       <div class="space-y-16">
-        {dbCategories.length > 0 && (
+        
+        {clientsWithTutorials.length > 0 && (
           <section>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {dbCategories.map((cat) => {
-                const tutCount = countsMap[cat.id] ?? 0;
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {clientsWithTutorials.map((client) => {
+                const clientTutorials = client.tutorials;
+                if (clientTutorials.length === 0) return null;
+                
+                const firstTutorial = clientTutorials[0];
+                const videoId = getYouTubeId(firstTutorial.videoUrl);
+                const thumbnailUrl = firstTutorial.imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '/placeholder.png');
+
                 return (
-                  <a
-                    href={`/tutoriales/categoria/${cat.slug}`}
-                    class="group bg-white rounded-xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col hover:shadow-[0_12px_40px_rgba(0,0,0,0.10)] transition-all duration-500"
-                  >
-                    <div class="relative w-full h-52 bg-white overflow-hidden flex items-center justify-center border-b border-gray-100 p-8">
-                      <img
-                        src={cat.imageUrl}
-                        alt={cat.name}
-                        class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105"
-                        onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Tutorial'"
+                  <a href={`/tutoriales/cliente/${client.slug}`} class="bg-white rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden flex flex-col group hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-500">
+                    <div class="pt-8 pb-2 px-6 text-center">
+                      <h3 class="text-[17px] md:text-[19px] font-bold text-[#0d1624] uppercase tracking-wide">{client.name}</h3>
+                    </div>
+                    <div class="flex-1 w-full flex items-center justify-center p-6 bg-white">
+                      <img 
+                        src={thumbnailUrl} 
+                        alt={client.name} 
+                        class="w-full h-56 object-contain transition-transform duration-700 group-hover:scale-105"
+                        onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Cliente'"
                       />
                     </div>
-
-                    <div class="p-6 flex-1 flex flex-col">
-                      <h3 class="text-base md:text-[17px] font-semibold text-slate-800 leading-snug mb-2 transition-colors duration-300 group-hover:text-[#f04f23]">
-                        {cat.name}
-                      </h3>
-
-                      <p class="text-[13px] text-slate-500 mb-4 flex-1">
-                        {tutCount > 0
-                          ? `${tutCount} tutorial${tutCount !== 1 ? 'es' : ''} disponible${tutCount !== 1 ? 's' : ''}`
-                          : 'Próximamente'}
-                      </p>
-
-                      <div class="pt-4 border-t border-gray-100 mt-auto">
-                        <span class="flex items-center text-[#f04f23] font-medium text-sm tracking-wide group/btn">
-                          VER TUTORIALES
-                          <span class="transform transition-transform duration-300 group-hover:translate-x-2 ml-2">→</span>
-                        </span>
+                    <div class="p-6 pt-2 mt-auto">
+                      <div class="w-full bg-[#1e1c19] text-white text-center font-bold text-[16px] py-3.5 rounded-xl group-hover:bg-black transition-colors shadow-md">
+                        Ver más
                       </div>
                     </div>
                   </a>
@@ -119,10 +112,10 @@ const getYouTubeId = (url: string) => {
 
         {uncategorizedTutorials.length > 0 && (
           <section>
-            {dbCategories.length > 0 && (
+            {clientsWithTutorials.length > 0 && (
               <div class="flex items-center gap-3 mb-6">
                 <div class="w-1 h-6 bg-[#f04f23] rounded-full"></div>
-                <h2 class="text-xl font-bold text-slate-800">Otros Tutoriales</h2>
+                <h2 class="text-xl font-bold text-slate-800">Otros Trabajos</h2>
                 <div class="flex-1 h-px bg-gray-100 ml-2"></div>
               </div>
             )}
@@ -138,7 +131,7 @@ const getYouTubeId = (url: string) => {
                         src={thumbnailUrl}
                         alt={tutorial.title}
                         class="w-full h-full object-contain p-8 transition-all duration-700 group-hover:scale-105"
-                        onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Tutorial'"
+                        onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Trabajo'"
                       />
                     </a>
 
@@ -160,7 +153,7 @@ const getYouTubeId = (url: string) => {
 
                       <div class="pt-4 border-t border-gray-100 mt-auto">
                         <a href={`/tutoriales/${tutorial.id}`} class="flex items-center text-[#f04f23] font-medium text-sm tracking-wide">
-                          VER TUTORIAL
+                          VER TRABAJO
                           <span class="transform transition-transform duration-300 group-hover:translate-x-2 ml-2">→</span>
                         </a>
                       </div>

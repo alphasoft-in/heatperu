@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TutorialForm from './TutorialForm';
 
-export default function CreateTutorialModal({ nextOrder = 1 }: { nextOrder?: number }) {
+export default function CreateTutorialModal({ nextOrder = 1, categories = [] }: { nextOrder?: number, categories?: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function CreateTutorialModal({ nextOrder = 1 }: { nextOrder?: num
             </div>
             
             <div className="p-0">
-              <TutorialForm nextOrder={nextOrder} />
+              <TutorialForm nextOrder={nextOrder} categories={categories} />
             </div>
           </div>
         </div>

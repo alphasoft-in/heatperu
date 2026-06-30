@@ -22,27 +22,27 @@ const dbCategories = await db.select()
   .offset(offset);
 ---
 
-<AdminLayout title="Categorías de Tutoriales | Heat Factory">
+<AdminLayout title="Clientes | Heat Factory">
 
   <div class="mb-5">
     <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
       <a href="/admin/tutoriales" class="hover:text-[#f04f23]">Tutoriales</a>
       <span>›</span>
-      <span class="text-gray-800 font-medium">Categorías</span>
+      <span class="text-gray-800 font-medium">Clientes</span>
     </div>
-    <h2 class="text-xl font-bold text-[#0d1624]">Categorías de Tutoriales</h2>
-    <p class="mt-1 text-[13px] text-gray-500">Gestiona las categorías que agrupan los tutoriales.</p>
+    <h2 class="text-xl font-bold text-[#0d1624]">Clientes</h2>
+    <p class="mt-1 text-[13px] text-gray-500">Gestiona los clientes para los que se han realizado trabajos.</p>
   </div>
 
   <div class="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
-      <h3 class="text-base font-semibold text-slate-800">Categorías ({totalItems})</h3>
+      <h3 class="text-base font-semibold text-slate-800">Clientes ({totalItems})</h3>
       <CreateTutorialCategoryModal client:load />
     </div>
 
     <div class="p-0">
       {dbCategories.length === 0 ? (
-        <p class="text-gray-500 text-sm p-6 text-center">No hay categorías aún. ¡Añade la primera!</p>
+        <p class="text-gray-500 text-sm p-6 text-center">No hay clientes aún. ¡Añade el primero!</p>
       ) : (
         <>
           <div class="overflow-x-auto">
@@ -50,7 +50,7 @@ const dbCategories = await db.select()
               <thead class="bg-gray-50">
                 <tr>
                   <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider w-20">Imagen</th>
-                  <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Categoría</th>
+                  <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Cliente</th>
                   <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">URL</th>
                   <th class="px-5 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
                 </tr>

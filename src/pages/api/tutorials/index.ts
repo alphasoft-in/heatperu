@@ -40,6 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
     const videoUrl = formData.get('videoUrl')?.toString() || '';
     const executionDate = formData.get('executionDate')?.toString() || null;
     const orderStr = formData.get('order')?.toString();
+    const categoryIdStr = formData.get('categoryId')?.toString();
     const imageFile = formData.get('image') as File | null;
 
     let imageUrl = 'https://placehold.co/600x400/eeeeee/999999?text=Tutorial';
@@ -68,6 +69,7 @@ export const POST: APIRoute = async ({ request }) => {
       videoUrl,
       imageUrl,
       executionDate,
+      categoryId: categoryIdStr ? parseInt(categoryIdStr, 10) : null,
       order: orderStr ? parseInt(orderStr, 10) : 0
     }).returning();
     

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import MDEditor from '@uiw/react-md-editor';
 
-export default function TutorialForm({ tutorial, nextOrder = 1 }: { tutorial?: any, nextOrder?: number }) {
+export default function TutorialForm({ tutorial, nextOrder = 1, categories = [] }: { tutorial?: any, nextOrder?: number, categories?: any[] }) {
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState(tutorial?.description || '');
 
@@ -65,6 +65,21 @@ export default function TutorialForm({ tutorial, nextOrder = 1 }: { tutorial?: a
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f04f23] text-[13px]"
           placeholder="Ej: ¿Cómo encender la caldera?"
         />
+      </div>
+
+      <div className="mb-3">
+        <label className="block text-[13px] font-medium text-gray-700 mb-1">Cliente *</label>
+        <select 
+          name="categoryId" 
+          defaultValue={tutorial?.categoryId || ''} 
+          required 
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f04f23] text-[13px] bg-white"
+        >
+          <option value="" disabled>Selecciona un cliente...</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
       </div>
 
       <div className="mb-3">

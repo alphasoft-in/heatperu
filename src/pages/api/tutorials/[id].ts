@@ -26,20 +26,21 @@ export const PUT: APIRoute = async ({ request, params }) => {
 
   try {
     const formData = await request.formData();
-    const title = formData.get('title')?.toString() || '';
-    const description = formData.get('description')?.toString() || '';
-    const videoUrl = formData.get('videoUrl')?.toString() || '';
+    const title = formData.get('title')?.toString();
+    const description = formData.get('description')?.toString();
+    const videoUrl = formData.get('videoUrl')?.toString();
     const executionDate = formData.get('executionDate')?.toString() || null;
     const orderStr = formData.get('order')?.toString();
+    const categoryIdStr = formData.get('categoryId')?.toString();
     const imageFile = formData.get('image') as File | null;
 
-    let updateData: any = {
-      title,
-      slug: createSlug(title),
-      description,
-      videoUrl,
-      executionDate,
-      order: orderStr ? parseInt(orderStr, 10) : 0
+    const updateData: any = {
+      ...(title && { title, slug: createSlug(title) }),
+      ...(description && { description }),
+      ...(videoUrl && { videoUrl }),
+      ...(executionDate !== undefined && { executionDate }),
+      ...(orderStr && { order: parseInt(orderStr, 10) }),
+      ...(categoryIdStr && { categoryId: parseInt(categoryIdStr, 10) })
     };
 
     if (imageFile && imageFile.size > 0) {

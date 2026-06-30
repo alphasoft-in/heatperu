@@ -86,11 +86,9 @@ const isTutSubcategorias = currentPath.startsWith('/admin/tutoriales/subcategori
       {isTutoriales && (
         <div class="ml-4 pl-3 border-l border-slate-700 space-y-0.5">
           <a href="/admin/tutoriales/categorias" class={`flex items-center px-3 py-2 rounded-md transition-colors text-[11px] font-medium group ${isTutCategorias ? 'text-[#f04f23]' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
-            Categorías
+            Clientes
           </a>
-          <a href="/admin/tutoriales/subcategorias" class={`flex items-center px-3 py-2 rounded-md transition-colors text-[11px] font-medium group ${isTutSubcategorias ? 'text-[#f04f23]' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
-            Subcategorías
-          </a>
+          {/* Subcategorias hidden per new flat hierarchy */}
         </div>
       )}
 
