@@ -1,192 +1,166 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import 'dotenv/config';
-import fs from 'node:fs';
-import path from 'node:path';
-import https from 'node:https';
 import { db } from '../src/db/index.js';
 import { categories, subcategories, products } from '../src/db/schema.js';
 import { eq } from 'drizzle-orm';
 
-const BASE_URL = 'https://heatperu.com/productos';
-const UPLOADS_DIR = path.resolve('public', 'uploads');
+async function main() {
+  console.log('Iniciando extracción de productos...');
 
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
+  // Obtener familias y subcategorías
+  const dbCategories = await db.select().from(categories);
+  const dbSubcategories = await db.select().from(subcategories);
 
-async function downloadFile(url: string, filename: string): Promise<string | null> {
-  const filepath = path.join(UPLOADS_DIR, filename);
-  if (fs.existsSync(filepath)) {
-    return `/uploads/${filename}`;
-  }
-  
-  return new Promise((resolve) => {
-    https.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        console.warn(`Warning: Failed to download ${url}: ${res.statusCode}`);
-        return resolve(filename.endsWith('.pdf') ? null : '/placeholder.png');
-      }
-      const fileStream = fs.createWriteStream(filepath);
-      res.pipe(fileStream);
-      fileStream.on('finish', () => {
-        fileStream.close();
-        resolve(`/uploads/${filename}`);
-      });
-      fileStream.on('error', (err) => {
-        console.warn(`Error writing ${filepath}:`, err.message);
-        fs.unlink(filepath, () => resolve(filename.endsWith('.pdf') ? null : '/placeholder.png'));
-      });
-    }).on('error', (err) => {
-      console.warn(`Network error downloading ${url}:`, err.message);
-      resolve(filename.endsWith('.pdf') ? null : '/placeholder.png');
-    });
-  });
-}
+  const uploadDirImg = path.join(process.cwd(), 'public', 'uploads', 'productos', 'imagenes');
+  const uploadDirPdf = path.join(process.cwd(), 'public', 'uploads', 'productos', 'pdfs');
+  if (!fs.existsSync(uploadDirImg)) fs.mkdirSync(uploadDirImg, { recursive: true });
+  if (!fs.existsSync(uploadDirPdf)) fs.mkdirSync(uploadDirPdf, { recursive: true });
 
-async function fetchPage(pageUrl: string) {
-  const res = await fetch(pageUrl);
-  const text = await res.text();
-  const match = text.match(/data-page="([^"]+)"/);
-  if (!match) throw new Error('data-page not found on ' + pageUrl);
-  const jsonStr = match[1].replace(/&quot;/g, '"');
-  return JSON.parse(jsonStr);
-}
+  let totalImported = 0;
 
-async function run() {
-  console.log('Fetching first page...');
-  const firstPage = await fetchPage(BASE_URL);
-  
-  const familyList = firstPage.props.familyList || [];
-  console.log(`Found ${familyList.length} families (categories).`);
-  
-  const categoryIdMap = new Map<number, number>(); // family.id -> our category.id
-  
-  // 1. Insert Categories
-  for (const family of familyList) {
-    let imageUrl = '/placeholder.png';
-    if (family.media && family.media.length > 0) {
-      console.log(`Downloading image for category ${family.name}...`);
-      imageUrl = await downloadFile(family.media[0].original_url, family.media[0].file_name);
-    }
+  for (const sub of dbSubcategories) {
+    const family = dbCategories.find(c => c.id === sub.categoryId);
+    if (!family) continue;
+
+    console.log(`\n--- Extrayendo productos para: ${family.name} > ${sub.name} ---`);
     
-    // Check if exists
-    let cat = await db.select().from(categories).where(eq(categories.slug, family.slug));
-    let catId: number;
-    
-    if (cat.length === 0) {
-      const inserted = await db.insert(categories).values({
-        name: family.name,
-        slug: family.slug,
-        imageUrl,
-      }).returning();
-      catId = inserted[0].id;
-    } else {
-      catId = cat[0].id;
-    }
-    categoryIdMap.set(family.id, catId);
-  }
+    let page = 1;
+    let hasMorePages = true;
 
-  // 2. Fetch and Insert Commodities
-  let currentPageUrl = BASE_URL;
-  let totalProducts = 0;
-  
-  const subcategoryIdMap = new Map<number, number>(); // their category_id -> our subcategory.id
-  
-  while (currentPageUrl) {
-    console.log(`Fetching ${currentPageUrl}...`);
-    const pageData = await fetchPage(currentPageUrl);
-    const commodities = pageData.props.commodities;
-    
-    for (const commodity of commodities.data) {
-      // Find or create subcategory
-      const oldCategoryId = parseInt(commodity.category.id);
-      let subcatId = subcategoryIdMap.get(oldCategoryId);
+    while (hasMorePages) {
+      const url = `https://heatperu.com/${family.slug}/${sub.slug}?page=${page}`;
       
-      if (!subcatId) {
-        // Create subcategory
-        const oldFamilyId = parseInt(commodity.category.family_id);
-        const mappedCatId = categoryIdMap.get(oldFamilyId);
-        
-        if (!mappedCatId) {
-          console.warn(`Category mapping not found for family_id ${oldFamilyId}`);
-          continue;
+      try {
+        console.log(`Página ${page}: ${url}`);
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.error(`Error al acceder a ${url}`);
+          break;
         }
+        const html = await res.text();
         
-        let subcat = await db.select().from(subcategories).where(eq(subcategories.slug, commodity.category.slug));
-        if (subcat.length === 0) {
-          const inserted = await db.insert(subcategories).values({
-            categoryId: mappedCatId,
-            name: commodity.category.name,
-            slug: commodity.category.slug,
-            imageUrl: '/placeholder.png', // We'll just use placeholder for subcategories if no image
-          }).returning();
-          subcatId = inserted[0].id;
-        } else {
-          subcatId = subcat[0].id;
+        const dataPageMatch = html.match(/data-page="([^"]+)"/);
+        if (!dataPageMatch) break;
+        
+        const jsonStr = dataPageMatch[1].replace(/&quot;/g, '"');
+        const data = JSON.parse(jsonStr);
+        
+        if (!data.props.commodities || !data.props.commodities.data) {
+          console.log(`No se encontraron productos en la pág ${page}.`);
+          break;
         }
-        subcategoryIdMap.set(oldCategoryId, subcatId);
-      }
-      
-      // Images & PDFs
-      let imageUrl = '/placeholder.png';
-      let pdfUrl: string | null = null;
-      const galleryUrls: string[] = [];
-      
-      if (commodity.media) {
-        for (const m of commodity.media) {
-          if (m.mime_type.startsWith('image/')) {
-            console.log(`Downloading image for product ${commodity.name}...`);
-            const dlUrl = await downloadFile(m.original_url, m.file_name);
-            if (dlUrl && dlUrl !== '/placeholder.png') {
-              galleryUrls.push(dlUrl);
+
+        const items = data.props.commodities.data;
+        if (items.length === 0) {
+          break;
+        }
+
+        for (const item of items) {
+          console.log(`  [${item.name}] Importando...`);
+          
+          let mainImage = '';
+          const gallery = [];
+          let pdfUrl = '';
+
+          if (item.media && Array.isArray(item.media)) {
+            const images = item.media.filter((m: any) => m.collection_name === 'commodities' || m.collection_name === 'commodity_images');
+            const pdfs = item.media.filter((m: any) => m.collection_name === 'comodity_guides' || m.mime_type === 'application/pdf');
+
+            for (let i = 0; i < images.length; i++) {
+              const m = images[i];
+              const originalUrl = m.original_url;
+              const cleanUrl = originalUrl.split('?')[0];
+              const ext = path.extname(cleanUrl) || '.jpg';
+              const fileName = `${item.slug}-img${i}-${Date.now()}${ext}`;
+              const localPath = path.join(uploadDirImg, fileName);
+              
+              try {
+                const imgRes = await fetch(originalUrl);
+                if (imgRes.ok) {
+                  fs.writeFileSync(localPath, Buffer.from(await imgRes.arrayBuffer()));
+                  if (i === 0) {
+                    mainImage = `/uploads/productos/imagenes/${fileName}`;
+                  } else {
+                    gallery.push(`/uploads/productos/imagenes/${fileName}`);
+                  }
+                }
+              } catch (e) {
+                console.error(`Error descargando imagen de ${item.name}`);
+              }
             }
-          } else if (m.mime_type === 'application/pdf') {
-            if (!pdfUrl) { // only get the first pdf
-              console.log(`Downloading PDF for product ${commodity.name}...`);
-              pdfUrl = await downloadFile(m.original_url, m.file_name);
+
+            if (pdfs.length > 0) {
+              const p = pdfs[0];
+              const originalUrl = p.original_url;
+              const cleanUrl = originalUrl.split('?')[0];
+              const ext = path.extname(cleanUrl) || '.pdf';
+              const fileName = `${item.slug}-ficha-${Date.now()}${ext}`;
+              const localPath = path.join(uploadDirPdf, fileName);
+
+              try {
+                const pdfRes = await fetch(originalUrl);
+                if (pdfRes.ok) {
+                  fs.writeFileSync(localPath, Buffer.from(await pdfRes.arrayBuffer()));
+                  pdfUrl = `/uploads/productos/pdfs/${fileName}`;
+                }
+              } catch (e) {
+                console.error(`Error descargando PDF de ${item.name}`);
+              }
             }
           }
-        }
-      }
 
-      if (galleryUrls.length > 0) {
-        imageUrl = galleryUrls[0];
+          if (!mainImage) mainImage = '/placeholder-product.jpg';
+
+          try {
+            await db.insert(products).values({
+              subcategoryId: sub.id,
+              name: item.name,
+              slug: item.slug,
+              sku: item.sku || 'N/A',
+              brand: item.brand ? item.brand.name : 'Genérico',
+              model: item.model || '',
+              description: item.description || '',
+              isAvailable: item.available !== false,
+              imageUrl: mainImage,
+              galleryUrls: JSON.stringify(gallery),
+              pdfUrl: pdfUrl || null,
+            }).onConflictDoUpdate({
+              target: products.slug,
+              set: {
+                name: item.name,
+                sku: item.sku || 'N/A',
+                brand: item.brand ? item.brand.name : 'Genérico',
+                model: item.model || '',
+                description: item.description || '',
+                isAvailable: item.available !== false,
+                imageUrl: mainImage,
+                galleryUrls: JSON.stringify(gallery),
+                pdfUrl: pdfUrl || null,
+              }
+            });
+            console.log(`  [${item.name}] ✓ Guardado.`);
+            totalImported++;
+          } catch (err) {
+            console.error(`  [${item.name}] ❌ Error BD:`, err);
+          }
+        }
+
+        if (data.props.commodities.next_page_url) {
+          page++;
+        } else {
+          hasMorePages = false;
+        }
+
+      } catch (e) {
+        console.error(`Error procesando subcategoría ${sub.name}:`, e);
+        hasMorePages = false;
       }
-      
-      // Insert or update product
-      const existingProduct = await db.select().from(products).where(eq(products.slug, commodity.slug));
-      if (existingProduct.length === 0) {
-        await db.insert(products).values({
-          subcategoryId: subcatId,
-          name: commodity.name,
-          slug: commodity.slug,
-          sku: commodity.sku || 'N/A',
-          brand: commodity.brand ? commodity.brand.name : 'Genérico',
-          model: commodity.model || null,
-          description: commodity.description || null,
-          isAvailable: commodity.available === 1 || commodity.available === true,
-          imageUrl,
-          galleryUrls: JSON.stringify(galleryUrls),
-          pdfUrl,
-        });
-      } else {
-        // Update existing with model and description
-        await db.update(products).set({
-          model: commodity.model || null,
-          description: commodity.description || null,
-          imageUrl,
-          galleryUrls: JSON.stringify(galleryUrls),
-        }).where(eq(products.slug, commodity.slug));
-      }
-      totalProducts++;
     }
-    
-    currentPageUrl = commodities.next_page_url;
   }
-  
-  console.log(`Successfully imported ${totalProducts} products!`);
+
+  console.log(`\n¡Proceso finalizado! Se importaron/actualizaron ${totalImported} productos.`);
+  process.exit(0);
 }
 
-run().catch((e) => {
-    console.error(e);
-    process.exit(1);
-});
+main().catch(console.error);
