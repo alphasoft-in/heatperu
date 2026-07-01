@@ -104,3 +104,11 @@ export const subscribers = pgTable('subscribers', {
   status: text('status').default('Activo').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const admins = pgTable('admins', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  name: text('name').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});

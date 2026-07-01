@@ -8,7 +8,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://heatperu.vercel.app',
+  site: 'https://heatperu.com',
   output: 'server',
   adapter: vercel(),
   vite: {

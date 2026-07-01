@@ -32,11 +32,10 @@ const isTutSubcategorias = currentPath.startsWith('/admin/tutoriales/subcategori
 
   {/* Sidebar */}
   <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col h-full hidden md:flex border-r border-slate-800 shadow-xl">
-    <div class="h-16 flex items-center px-6 bg-slate-950 border-b border-slate-800">
-      <span class="text-lg font-bold tracking-wider text-white flex items-center">
-        <svg class="w-6 h-6 mr-2 text-[#f04f23]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-        HF ADMIN
-      </span>
+    <div class="py-6 flex items-center justify-center relative z-20">
+      <a href="/admin" class="flex items-center justify-center bg-white rounded-full w-20 h-20 shadow-xl shadow-black/40 transition-transform hover:scale-105">
+        <img src="/logoheat.png" alt="Heat Factory Logo" class="w-[75%] h-auto object-contain drop-shadow-sm" />
+      </a>
     </div>
     
     <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
@@ -125,13 +124,83 @@ const isTutSubcategorias = currentPath.startsWith('/admin/tutoriales/subcategori
         </div>
       </div>
       
-      <div class="flex items-center space-x-4">
-        <span class="text-sm font-medium text-gray-600">Admin</span>
-        <div class="w-8 h-8 rounded-full bg-[#f04f23] flex items-center justify-center text-white font-bold">
+      <div class="flex items-center space-x-3 relative">
+        <div class="flex flex-col items-end hidden sm:flex">
+          <span class="text-sm font-medium text-gray-800">Admin</span>
+        </div>
+        <button id="userMenuBtn" class="cursor-pointer w-10 h-10 rounded-full bg-slate-900 border-2 border-white shadow-sm flex items-center justify-center text-white font-bold transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#f04f23] focus:ring-offset-1">
           A
+        </button>
+        
+        {/* Dropdown Menu */}
+        <div id="userDropdown" class="absolute right-0 top-12 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-100 hidden z-50 transition-all duration-150 opacity-0 scale-95 origin-top-right">
+          <div class="px-4 py-2 border-b border-gray-100 sm:hidden">
+            <p class="text-sm font-medium text-gray-800">Admin</p>
+          </div>
+          <button id="logoutBtn" class="cursor-pointer w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#f04f23] transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            Cerrar Sesión
+          </button>
         </div>
       </div>
     </header>
+
+    <script>
+      // Logout logic
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/login';
+          } catch (e) {
+            console.error('Error al cerrar sesión', e);
+          }
+        });
+      }
+
+      // Dropdown logic
+      const userMenuBtn = document.getElementById('userMenuBtn');
+      const userDropdown = document.getElementById('userDropdown');
+      
+      if (userMenuBtn && userDropdown) {
+        const toggleDropdown = () => {
+          const isHidden = userDropdown.classList.contains('hidden');
+          if (isHidden) {
+            userDropdown.classList.remove('hidden');
+            // Small delay for CSS transition
+            setTimeout(() => {
+              userDropdown.classList.remove('opacity-0', 'scale-95');
+              userDropdown.classList.add('opacity-100', 'scale-100');
+            }, 10);
+          } else {
+            closeDropdown();
+          }
+        };
+
+        const closeDropdown = () => {
+          userDropdown.classList.remove('opacity-100', 'scale-100');
+          userDropdown.classList.add('opacity-0', 'scale-95');
+          setTimeout(() => {
+            if (!userDropdown.classList.contains('opacity-100')) {
+              userDropdown.classList.add('hidden');
+            }
+          }, 150);
+        };
+
+        userMenuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleDropdown();
+        });
+
+        document.addEventListener('click', (e) => {
+          const target = e.target as Node;
+          if (!userDropdown.contains(target) && !userMenuBtn.contains(target)) {
+            closeDropdown();
+          }
+        });
+      }
+    </script>
 
     {/* Main scrollable area */}
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 lg:p-10">
