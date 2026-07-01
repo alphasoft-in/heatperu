@@ -70,17 +70,17 @@ export default function Slider() {
       </div>
 
       {/* Pagination Dots */}
-      <div className="flex justify-center items-center pb-2 md:pb-4 space-x-1">
+      <div className="flex justify-center items-center pb-2 md:pb-4 gap-2 md:gap-2.5">
         {slides.map((slide, slideIndex) => (
           <button
             key={slide.id}
             onClick={() => goToSlide(slideIndex)}
             aria-label={`Ir al slide ${slideIndex + 1}`}
-            className="min-w-[48px] min-h-[48px] flex items-center justify-center cursor-pointer focus:outline-none group"
+            className="flex items-center justify-center cursor-pointer focus:outline-none p-1.5 group"
           >
             <div className={`transition-all duration-300 rounded-full ${
               currentIndex === slideIndex 
-                ? 'bg-[#f04f23] w-2 h-2 md:w-2.5 md:h-2.5 scale-110' 
+                ? 'bg-[#f04f23] w-6 md:w-8 h-1.5 md:h-2 scale-100' 
                 : 'bg-gray-300 group-hover:bg-gray-400 w-1.5 h-1.5 md:w-2 md:h-2'
             }`} />
           </button>

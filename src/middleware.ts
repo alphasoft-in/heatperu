@@ -18,7 +18,22 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     try {
       // Verify JWT
-      await jose.jwtVerify(token, JWT_SECRET);
+      const { payload } = await jose.jwtVerify(token, JWT_SECRET);
+      
+      // Refresh token to extend session by 30 minutes on activity
+      const newToken = await new jose.SignJWT({ id: payload.id, email: payload.email, name: payload.name })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('30m')
+        .sign(JWT_SECRET);
+        
+      cookies.set('admin_session', newToken, {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 30, // 30 minutes
+      });
       
       // Allow request to continue
       return next();

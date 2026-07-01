@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+
 import { db } from '../../../db';
 import { admins } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
@@ -9,14 +10,30 @@ const JWT_SECRET = new TextEncoder().encode(
   import.meta.env.JWT_SECRET || process.env.JWT_SECRET || 'super-secret-heatperu-key-2026-fallback'
 );
 
+const ALLOWED_EMAILS = [
+  'elvis.zevallos@heatperu.com',
+  'ana.hernandez@heatperu.com'
+];
+
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    let { email, password } = body;
+    
+    if (typeof email === 'string') {
+      email = email.trim();
+    }
 
     if (!email || !password) {
       return new Response(JSON.stringify({ message: 'Email y contraseña son requeridos' }), {
         status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (!ALLOWED_EMAILS.includes(email)) {
+      return new Response(JSON.stringify({ message: 'No tienes acceso al sistema' }), {
+        status: 403,
         headers: { 'Content-Type': 'application/json' },
       });
     }
@@ -44,7 +61,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const jwt = await new jose.SignJWT({ id: user.id, email: user.email, name: user.name })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
-      .setExpirationTime('1d') // Expire in 1 day
+      .setExpirationTime('30m') // Expire in 30 minutes
       .sign(JWT_SECRET);
 
     // Set cookie
@@ -53,7 +70,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24, // 1 day
+      maxAge: 60 * 30, // 30 minutes
     });
 
     return new Response(JSON.stringify({ message: 'Login successful' }), {

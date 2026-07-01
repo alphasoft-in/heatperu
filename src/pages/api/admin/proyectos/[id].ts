@@ -32,6 +32,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
     const orderStr = formData.get('order')?.toString();
     const executionDate = formData.get('executionDate')?.toString() || null;
     const galleryFiles = formData.getAll('gallery') as File[];
+    const galleryOrderStr = formData.get('galleryOrder')?.toString();
 
     if (!title || !description) {
       return new Response(JSON.stringify({ error: 'El título y la descripción son obligatorios' }), { status: 400 });
@@ -50,10 +51,8 @@ export const PUT: APIRoute = async ({ params, request }) => {
     let uploadedUrls: string[] = [];
     
     if (galleryFiles && galleryFiles.length > 0) {
-      let hasValidFile = false;
       for (const file of galleryFiles) {
         if (file.size > 0) {
-          hasValidFile = true;
           const arrayBuffer = await file.arrayBuffer();
           const buffer = Buffer.from(arrayBuffer);
           
@@ -71,11 +70,19 @@ export const PUT: APIRoute = async ({ params, request }) => {
           uploadedUrls.push((uploadResult as any).secure_url);
         }
       }
+    }
 
-      if (hasValidFile) {
-        updateData.gallery = JSON.stringify(uploadedUrls);
-        updateData.imageUrl = uploadedUrls.length > 0 ? uploadedUrls[0] : '/placeholder.png';
-      }
+    if (galleryOrderStr) {
+      const galleryOrder = JSON.parse(galleryOrderStr);
+      let newFileIndex = 0;
+      const finalGallery = galleryOrder.map((item: string) => {
+        if (item === 'NEW') {
+          return uploadedUrls[newFileIndex++];
+        }
+        return item;
+      }).filter(Boolean);
+      updateData.gallery = JSON.stringify(finalGallery);
+      updateData.imageUrl = finalGallery.length > 0 ? finalGallery[0] : (updateData.imageUrl || '/placeholder.png');
     }
 
     await db.update(projects).set(updateData).where(eq(projects.id, id));

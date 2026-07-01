@@ -17,22 +17,54 @@ export default function ProjectForm({ initialData, nextOrder }: { initialData?: 
   const [description, setDescription] = useState(initialData?.description || '');
   const [executionDate, setExecutionDate] = useState(initialData?.executionDate || '');
   const [order, setOrder] = useState<number>(initialData?.order ?? nextOrder ?? 1);
-  const [images, setImages] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>(
-    initialData?.gallery && initialData.gallery !== '[]' 
+  type GalleryItem = {
+    id: string;
+    isExisting: boolean;
+    url: string;
+    file?: File;
+  };
+
+  const [gallery, setGallery] = useState<GalleryItem[]>(() => {
+    const initialUrls: string[] = initialData?.gallery && initialData.gallery !== '[]' 
       ? JSON.parse(initialData.gallery) 
-      : (initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? [initialData.imageUrl] : [])
-  );
+      : (initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? [initialData.imageUrl] : []);
+    
+    return initialUrls.map(url => ({
+      id: Math.random().toString(36).substring(7),
+      isExisting: true,
+      url: url,
+    }));
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
-      setImages(files);
-      const newPreviews = files.map(file => URL.createObjectURL(file));
-      setPreviews(newPreviews);
+      const newItems: GalleryItem[] = files.map(file => ({
+        id: Math.random().toString(36).substring(7),
+        isExisting: false,
+        url: URL.createObjectURL(file),
+        file
+      }));
+      setGallery(prev => [...prev, ...newItems]);
     }
+  };
+
+  const removeItem = (index: number) => {
+    setGallery(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const moveItem = (index: number, direction: 'left' | 'right') => {
+    setGallery(prev => {
+      const newGallery = [...prev];
+      if (direction === 'left' && index > 0) {
+        [newGallery[index - 1], newGallery[index]] = [newGallery[index], newGallery[index - 1]];
+      } else if (direction === 'right' && index < newGallery.length - 1) {
+        [newGallery[index + 1], newGallery[index]] = [newGallery[index], newGallery[index + 1]];
+      }
+      return newGallery;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,8 +80,13 @@ export default function ProjectForm({ initialData, nextOrder }: { initialData?: 
       if (executionDate) {
         formData.append('executionDate', executionDate);
       }
-      images.forEach(img => {
-        formData.append('gallery', img);
+      const orderArray = gallery.map(item => item.isExisting ? item.url : 'NEW');
+      formData.append('galleryOrder', JSON.stringify(orderArray));
+      
+      gallery.forEach(item => {
+        if (!item.isExisting && item.file) {
+          formData.append('gallery', item.file);
+        }
       });
 
       const url = initialData ? `/api/admin/proyectos/${initialData.id}` : '/api/admin/proyectos';
@@ -143,10 +180,27 @@ export default function ProjectForm({ initialData, nextOrder }: { initialData?: 
         </label>
         <div className="mt-1 flex justify-center px-4 pt-3 pb-4 border-2 border-gray-300 border-dashed rounded-md relative hover:bg-gray-50 transition-colors">
           <div className="space-y-1 text-center w-full">
-            {previews.length > 0 ? (
+            {gallery.length > 0 ? (
               <div className="flex flex-wrap gap-2 justify-center mb-3">
-                {previews.map((src, i) => (
-                  <img key={i} src={src} alt="Vista previa" className="h-16 w-16 object-cover rounded border" />
+                {gallery.map((item, i) => (
+                  <div key={item.id} className="relative group mt-2 mr-2">
+                    <img src={item.url} alt="Vista previa" className="h-16 w-16 object-cover rounded border" />
+                    
+                    {/* Botón Eliminar */}
+                    <button type="button" onClick={() => removeItem(i)} className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 cursor-pointer shadow-md" title="Eliminar">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    
+                    {/* Botones Mover */}
+                    <div className="absolute bottom-0 left-0 right-0 flex justify-between px-1 pb-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button type="button" onClick={() => moveItem(i, 'left')} disabled={i === 0} className={`bg-gray-800/80 text-white rounded-sm p-0.5 ${i === 0 ? 'invisible' : 'hover:bg-gray-700 cursor-pointer'}`} title="Mover a la izquierda">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                      </button>
+                      <button type="button" onClick={() => moveItem(i, 'right')} disabled={i === gallery.length - 1} className={`bg-gray-800/80 text-white rounded-sm p-0.5 ${i === gallery.length - 1 ? 'invisible' : 'hover:bg-gray-700 cursor-pointer'}`} title="Mover a la derecha">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                      </button>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -156,7 +210,7 @@ export default function ProjectForm({ initialData, nextOrder }: { initialData?: 
             )}
             <div className="flex text-[13px] text-gray-600 justify-center mt-1">
               <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-[#f04f23] hover:text-[#d0421c] focus-within:outline-none">
-                <span>{previews.length > 0 ? 'Seleccionar nuevas fotos' : 'Sube tus imágenes'}</span>
+                <span>{gallery.length > 0 ? 'Añadir más fotos' : 'Sube tus imágenes'}</span>
                 <input id="file-upload" name="file-upload" type="file" multiple className="sr-only" accept="image/*" onChange={handleImageChange} />
               </label>
             </div>

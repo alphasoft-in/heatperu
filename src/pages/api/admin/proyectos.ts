@@ -27,6 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
     const orderStr = formData.get('order')?.toString();
     const executionDate = formData.get('executionDate')?.toString() || null;
     const galleryFiles = formData.getAll('gallery') as File[];
+    const galleryOrderStr = formData.get('galleryOrder')?.toString();
 
     if (!title || !description) {
       return new Response(JSON.stringify({ error: 'El título y la descripción son obligatorios' }), { status: 400 });
@@ -56,8 +57,22 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
+    let finalGallery: string[] = [];
+    if (galleryOrderStr) {
+      const galleryOrder = JSON.parse(galleryOrderStr);
+      let newFileIndex = 0;
+      finalGallery = galleryOrder.map((item: string) => {
+        if (item === 'NEW') {
+          return uploadedUrls[newFileIndex++];
+        }
+        return item;
+      }).filter(Boolean);
+    } else {
+      finalGallery = uploadedUrls;
+    }
+
     const order = orderStr ? parseInt(orderStr, 10) : 0;
-    const imageUrl = uploadedUrls.length > 0 ? uploadedUrls[0] : '/placeholder.png';
+    const imageUrl = finalGallery.length > 0 ? finalGallery[0] : '/placeholder.png';
 
     await db.insert(projects).values({
       title,
@@ -65,7 +80,7 @@ export const POST: APIRoute = async ({ request }) => {
       description,
       order,
       executionDate,
-      gallery: JSON.stringify(uploadedUrls),
+      gallery: JSON.stringify(finalGallery),
       imageUrl,
     });
 
