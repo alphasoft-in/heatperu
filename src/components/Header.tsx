@@ -118,10 +118,10 @@ export default function Header() {
 
           {/* Desktop Social Icons */}
           <div className="hidden lg:flex items-center space-x-6">
-            <a href="https://www.youtube.com/@HEATFACTORYPERU" target="_blank" rel="noopener noreferrer" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Youtube className="w-6 h-6" /></a>
-            <a href="https://www.facebook.com/heatfactoryperu" target="_blank" rel="noopener noreferrer" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Facebook className="w-[1.2rem] h-[1.2rem]" /></a>
-            <a href="https://www.instagram.com/calderas_quemadores_peru" target="_blank" rel="noopener noreferrer" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Instagram className="w-6 h-6" /></a>
-            <a href="https://pe.linkedin.com/company/heat-factory" target="_blank" rel="noopener noreferrer" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Linkedin className="w-6 h-6" /></a>
+            <a href="https://www.youtube.com/@HEATFACTORYPERU" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Youtube className="w-6 h-6" /></a>
+            <a href="https://www.facebook.com/heatfactoryperu" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Facebook className="w-[1.2rem] h-[1.2rem]" /></a>
+            <a href="https://www.instagram.com/calderas_quemadores_peru" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Instagram className="w-6 h-6" /></a>
+            <a href="https://pe.linkedin.com/company/heat-factory" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-[#0d1624] hover:text-[#f04f23] transition-colors"><Linkedin className="w-6 h-6" /></a>
           </div>
 
           {/* Mobile Hamburger Button */}

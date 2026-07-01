@@ -47,7 +47,7 @@ export default function Slider() {
         
         {/* Contenedor de la Imagen */}
         <div className="w-full h-full px-10 md:px-24 py-4 md:py-8 bg-white flex items-center justify-center">
-          <img src={slides[currentIndex].imageUrl} alt={slides[currentIndex].alt} className="w-full h-full object-contain transition-opacity duration-500" />
+          <img src={slides[currentIndex].imageUrl} alt={slides[currentIndex].alt} fetchPriority="high" className="w-full h-full object-contain transition-opacity duration-500" />
         </div>
 
         {/* Left Arrow */}
@@ -70,15 +70,15 @@ export default function Slider() {
       </div>
 
       {/* Pagination Dots */}
-      <div className="flex justify-center items-center pb-2 md:pb-4">
+      <div className="flex justify-center items-center pb-2 md:pb-4 space-x-1">
         {slides.map((slide, slideIndex) => (
           <button
             key={slide.id}
             onClick={() => goToSlide(slideIndex)}
             aria-label={`Ir al slide ${slideIndex + 1}`}
-            className="p-2 md:p-3 cursor-pointer focus:outline-none group"
+            className="min-w-[48px] min-h-[48px] flex items-center justify-center cursor-pointer focus:outline-none group"
           >
-            <div className={`transition-all duration-300 rounded-full mx-auto ${
+            <div className={`transition-all duration-300 rounded-full ${
               currentIndex === slideIndex 
                 ? 'bg-[#f04f23] w-2 h-2 md:w-2.5 md:h-2.5 scale-110' 
                 : 'bg-gray-300 group-hover:bg-gray-400 w-1.5 h-1.5 md:w-2 md:h-2'
