@@ -1,6 +1,7 @@
 ---
 import AdminLayout from "../../../layouts/AdminLayout.astro";
 import ComplaintActions from "../../../components/admin/ComplaintActions.tsx";
+import ComplaintChart from "../../../components/admin/ComplaintChart.tsx";
 import { db } from "../../../db";
 import { complaints } from "../../../db/schema";
 import { desc, count } from "drizzle-orm";
@@ -12,6 +13,16 @@ const offset = (page - 1) * limit;
 
 const totalItemsResult = await db.select({ value: count() }).from(complaints);
 const totalItems = totalItemsResult[0].value;
+
+const allComplaintsData = await db.select({
+  createdAt: complaints.createdAt,
+  complaintType: complaints.complaintType
+}).from(complaints).orderBy(desc(complaints.createdAt));
+
+const chartData = allComplaintsData.map(c => ({
+  createdAt: c.createdAt.toISOString(),
+  type: c.complaintType
+}));
 
 function getBusinessDaysElapsed(startDate: Date) {
   let count = 0;
@@ -42,6 +53,8 @@ const dbComplaints = await db.select()
     <h2 class="text-xl font-bold text-[#0d1624]">Libro de Reclamaciones</h2>
     <p class="mt-1 text-[13px] text-gray-500">Visualiza y gestiona las quejas y reclamos registrados por los clientes.</p>
   </div>
+
+  <ComplaintChart client:load data={chartData} />
 
   <div class="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">

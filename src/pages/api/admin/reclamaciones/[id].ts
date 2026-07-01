@@ -33,3 +33,25 @@ export const PUT: APIRoute = async ({ request, params }) => {
     });
   }
 };
+
+export const DELETE: APIRoute = async ({ params }) => {
+  try {
+    const id = params.id as string;
+    if (!id) {
+      return new Response(JSON.stringify({ success: false, message: 'ID inválido' }), { status: 400 });
+    }
+
+    await db.delete(complaints).where(eq(complaints.id, id));
+
+    return new Response(JSON.stringify({ success: true, message: 'Reclamo eliminado exitosamente' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    console.error('Error deleting complaint:', error);
+    return new Response(JSON.stringify({ success: false, message: 'Error interno del servidor' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};

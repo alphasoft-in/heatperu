@@ -1,15 +1,21 @@
 ---
 import AdminLayout from "../../../layouts/AdminLayout.astro";
+import SubscriberChart from "../../../components/admin/SubscriberChart.tsx";
 import { db } from "../../../db";
 import { subscribers } from "../../../db/schema";
 import { desc } from "drizzle-orm";
-import { Download, Mail } from "lucide-react";
+import { Download, Mail, Trash2 } from "lucide-react";
 
 // Fetch data
 const allSubscribers = await db
   .select()
   .from(subscribers)
   .orderBy(desc(subscribers.createdAt));
+
+const chartData = allSubscribers.map(s => ({
+  createdAt: s.createdAt.toISOString(),
+  status: s.status
+}));
 ---
 
 <AdminLayout title="Suscriptores del Boletín">
@@ -43,6 +49,8 @@ const allSubscribers = await db
     </div>
   </div>
 
+  <SubscriberChart client:load data={chartData} />
+
   <div
     class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
   >
@@ -55,13 +63,14 @@ const allSubscribers = await db
             <th class="px-6 py-4">Email</th>
             <th class="px-6 py-4">Fecha de Suscripción</th>
             <th class="px-6 py-4">Estado</th>
+            <th class="px-6 py-4 text-right">Acciones</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
           {
             allSubscribers.length === 0 ? (
               <tr>
-                <td colspan="3" class="px-6 py-12 text-center text-slate-500">
+                <td colspan="4" class="px-6 py-12 text-center text-slate-500">
                   <Mail className="w-12 h-12 mx-auto text-slate-300 mb-3" />
                   <p class="text-base font-medium text-slate-900">
                     No hay suscriptores aún
@@ -98,6 +107,16 @@ const allSubscribers = await db
                       {sub.status}
                     </span>
                   </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right">
+                    <button
+                      type="button"
+                      data-id={sub.id}
+                      class="btn-delete text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                      title="Eliminar suscriptor"
+                    >
+                      <Trash2 className="w-4 h-4 inline" />
+                    </button>
+                  </td>
                 </tr>
               ))
             )
@@ -106,4 +125,43 @@ const allSubscribers = await db
       </table>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const deleteButtons = document.querySelectorAll('.btn-delete');
+      
+      deleteButtons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const button = e.currentTarget as HTMLButtonElement;
+          const id = button.getAttribute('data-id');
+          
+          if (!id) return;
+          
+          if (confirm('¿Está seguro de revocar y eliminar a este suscriptor?')) {
+            try {
+              button.disabled = true;
+              button.classList.add('opacity-50');
+              
+              const res = await fetch(`/api/admin/suscriptores/${id}`, {
+                method: 'DELETE'
+              });
+              
+              if (res.ok) {
+                window.location.reload();
+              } else {
+                alert('Ocurrió un error al intentar eliminar el suscriptor.');
+                button.disabled = false;
+                button.classList.remove('opacity-50');
+              }
+            } catch (error) {
+              console.error(error);
+              alert('Error de red. Intente nuevamente.');
+              button.disabled = false;
+              button.classList.remove('opacity-50');
+            }
+          }
+        });
+      });
+    });
+  </script>
 </AdminLayout>

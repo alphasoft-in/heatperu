@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Edit2, X, FileText, CheckCircle, Clock, ChevronDown, ChevronUp, Download } from 'lucide-react';
+import { Edit2, X, FileText, CheckCircle, Clock, ChevronDown, ChevronUp, Download, Trash2 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
 interface Complaint {
@@ -129,16 +129,16 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
       // Draw Header Box
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(226, 232, 240);
-      doc.rect(20, y - 5, 170, 10, 'FD');
+      doc.rect(20, y - 4, 170, 8, 'FD');
       
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setTextColor(30, 41, 59);
       doc.text(title, 23, y + 1.5);
       
-      y += 10;
+      y += 8;
       
-      doc.setFontSize(9);
+      doc.setFontSize(8);
       
       Object.entries(data).forEach(([key, value]) => {
         doc.setFont("helvetica", "bold");
@@ -146,21 +146,22 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
         const isLongField = ['Sustento', 'Detalle', 'Pedido', 'Descripción'].includes(key);
 
         if (isLongField) {
-          doc.setTextColor(100, 116, 139);
-          doc.text(keyText, 25, y);
-          y += 6;
-          
           const valueLines = doc.splitTextToSize(value, 165);
-          if (y + (valueLines.length * 5) > 280) {
+          
+          if (y + 5 + (valueLines.length * 4) > 280) {
             doc.addPage();
             y = 20;
             doc.setFont("helvetica", "bold");
           }
+
+          doc.setTextColor(100, 116, 139);
+          doc.text(keyText, 25, y);
+          y += 5;
           
           doc.setFont("helvetica", "normal");
           doc.setTextColor(15, 23, 42);
           doc.text(valueLines, 25, y);
-          y += (valueLines.length * 5) + 3;
+          y += (valueLines.length * 4) + 2;
         } else {
           const keyWidth = doc.getTextWidth(keyText);
           let startX = 70;
@@ -170,7 +171,7 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
           }
 
           const valueLines = doc.splitTextToSize(value, 195 - startX);
-          if (y + (valueLines.length * 5) > 280) {
+          if (y + (valueLines.length * 4) > 280) {
             doc.addPage();
             y = 20;
             doc.setFont("helvetica", "bold");
@@ -183,11 +184,11 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
           doc.setTextColor(15, 23, 42);
           doc.text(valueLines, startX, y);
           
-          y += (valueLines.length * 5) + 3;
+          y += (valueLines.length * 4) + 2;
         }
       });
       
-      y += 5;
+      y += 3;
     };
     
     addSection('1. DATOS DEL CONSUMIDOR', {
@@ -244,7 +245,7 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
       });
     }
 
-    const totalPages = doc.internal.getNumberOfPages();
+    const totalPages = (doc.internal as any).getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
       doc.setFont("helvetica", "italic");
@@ -299,11 +300,33 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
     updateStatus('Atendido', resType, resMessage);
   };
 
+  const deleteComplaint = async () => {
+    if (confirm('¿Está seguro de eliminar este reclamo? Esta acción no se puede deshacer.')) {
+      try {
+        const res = await fetch(`/api/admin/reclamaciones/${complaint.id}`, {
+          method: 'DELETE'
+        });
+        
+        if (res.ok) {
+          toast.success('Reclamo eliminado exitosamente');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          toast.error('Error al eliminar el reclamo');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Error de red');
+      }
+    }
+  };
+
   return (
     <>
       <button 
         onClick={generatePDF}
-        className="text-red-600 bg-red-50 hover:bg-red-100 cursor-pointer p-1.5 rounded-md transition-colors"
+        className="text-blue-600 bg-blue-50 hover:bg-blue-100 cursor-pointer p-1.5 rounded-md transition-colors"
         title="Descargar PDF"
       >
         <Download size={16} />
@@ -314,6 +337,13 @@ export default function ComplaintActions({ complaint }: { complaint: Complaint }
         title="Ver detalles y gestionar"
       >
         <FileText size={16} />
+      </button>
+      <button 
+        onClick={deleteComplaint}
+        className="text-slate-500 bg-slate-100 hover:bg-red-100 hover:text-red-600 cursor-pointer p-1.5 rounded-md transition-colors"
+        title="Eliminar reclamo"
+      >
+        <Trash2 size={16} />
       </button>
 
       {isOpen && (

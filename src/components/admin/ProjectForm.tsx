@@ -25,10 +25,17 @@ export default function ProjectForm({ initialData, nextOrder }: { initialData?: 
   };
 
   const [gallery, setGallery] = useState<GalleryItem[]>(() => {
-    const initialUrls: string[] = initialData?.gallery && initialData.gallery !== '[]' 
-      ? JSON.parse(initialData.gallery) 
-      : (initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif' ? [initialData.imageUrl] : []);
-    
+    let initialUrls: string[] = [];
+    if (initialData?.gallery && initialData.gallery !== '[]') {
+      try {
+        const parsed = JSON.parse(initialData.gallery);
+        initialUrls = Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        console.error('Error parsing gallery:', e);
+      }
+    } else if (initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif') {
+      initialUrls = [initialData.imageUrl];
+    }
     return initialUrls.map(url => ({
       id: Math.random().toString(36).substring(7),
       isExisting: true,

@@ -41,9 +41,16 @@ export default function ProductForm({
   );
   
   // Gallery states
-  const [existingGallery, setExistingGallery] = useState<string[]>(
-    initialData?.galleryUrls ? JSON.parse(initialData.galleryUrls) : []
-  );
+  const [existingGallery, setExistingGallery] = useState<string[]>(() => {
+    if (!initialData?.galleryUrls) return [];
+    try {
+      const parsed = JSON.parse(initialData.galleryUrls);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.error('Error parsing galleryUrls:', e);
+      return [];
+    }
+  });
   const [newGalleryFiles, setNewGalleryFiles] = useState<File[]>([]);
   const [newGalleryPreviews, setNewGalleryPreviews] = useState<string[]>([]);
   
