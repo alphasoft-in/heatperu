@@ -19,8 +19,8 @@ import PageHeader from "../components/PageHeader.astro";
     bgImage="/bc-servicios.jpeg"
   />
 
-  <main class="max-w-[1200px] mx-auto pt-8 pb-0 md:pb-16 md:py-16 px-4 md:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-20 items-center">
+  <main class="max-w-[1200px] mx-auto pt-8 pb-0 md:py-10 lg:pt-10 lg:pb-4 px-4 md:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
       
       {/* Columna Izquierda: Imagen */}
       <div class="relative w-full rounded-3xl overflow-hidden shadow-[0_20px_50px_rgb(0,0,0,0.1)] group border-[6px] border-white">
@@ -35,16 +35,16 @@ import PageHeader from "../components/PageHeader.astro";
 
       {/* Columna Derecha: Texto */}
       <div class="flex flex-col justify-center items-center md:items-start text-center md:text-left">
-        <h2 class="text-[24px] md:text-[36px] font-black text-[#0d1624] tracking-tight uppercase mb-3 md:mb-4">
+        <h2 class="text-[24px] lg:text-[28px] font-black text-[#0d1624] tracking-tight uppercase mb-3 md:mb-4">
           SOBRE NOSOTROS
         </h2>
-        <div class="w-16 h-[3px] bg-[#f04f23] mb-5 md:mb-8 mx-auto md:mx-0"></div>
+        <div class="w-16 h-[3px] bg-[#f04f23] mb-5 lg:mb-8 mx-auto md:mx-0"></div>
         
-        <p class="font-bold text-[#0d1624] text-[16px] md:text-[19px] mb-4 md:mb-6 leading-tight">
+        <p class="font-bold text-[#0d1624] text-[16px] lg:text-[19px] mb-4 lg:mb-6 leading-tight">
           Innovación y Excelencia en Quemadores y Calderas
         </p>
 
-        <div class="space-y-4 md:space-y-6 text-slate-600 leading-relaxed text-[15px] md:text-[16px]">
+        <div class="space-y-4 lg:space-y-6 text-slate-600 leading-relaxed text-[15px] lg:text-[16px]">
           <p>
             En <strong class="text-[#0d1624]">Heat Factory</strong> nos especializamos en la generación, distribución y uso eficiente de la energía en procesos termodinámicos.
           </p>
@@ -54,9 +54,9 @@ import PageHeader from "../components/PageHeader.astro";
         </div>
 
         {/* Años de experiencia */}
-        <div class="mt-8 md:mt-10 inline-flex items-center justify-center gap-5 bg-slate-50 border border-slate-100 rounded-2xl p-4 md:p-6 px-6 md:px-8 shadow-sm hover:shadow-md transition-shadow duration-300 w-full md:w-fit">
-          <span class="text-4xl md:text-6xl font-black bg-gradient-to-r from-[#f04f23] to-[#ff7e5f] bg-clip-text text-transparent tracking-tighter">+<span id="exp-counter">1</span></span>
-          <span class="text-slate-700 font-bold leading-tight text-[14px] md:text-[16px] uppercase tracking-wide text-left">
+        <div class="mt-6 lg:mt-10 inline-flex items-center justify-center gap-4 lg:gap-5 bg-slate-50 border border-slate-100 rounded-2xl p-4 lg:p-6 px-6 lg:px-8 shadow-sm hover:shadow-md transition-shadow duration-300 w-full md:w-fit">
+          <span class="text-4xl lg:text-6xl font-black bg-gradient-to-r from-[#f04f23] to-[#ff7e5f] bg-clip-text text-transparent tracking-tighter">+<span id="exp-counter">1</span></span>
+          <span class="text-slate-700 font-bold leading-tight text-[14px] lg:text-[16px] uppercase tracking-wide text-left">
             Años de<br/>experiencia
           </span>
         </div>
@@ -65,13 +65,13 @@ import PageHeader from "../components/PageHeader.astro";
     </div>
 
     {/* Nuestra Historia (Timeline) */}
-    <div class="mt-16 md:mt-32 lg:mt-40 relative">
-      <div class="text-center mb-10 md:mb-16">
-        <h2 class="text-[22px] md:text-[36px] font-black text-[#0d1624] tracking-tight uppercase mb-3 md:mb-4">
+    <div class="mt-12 lg:mt-20 relative">
+      <div class="text-center mb-10 lg:mb-16">
+        <h2 class="text-[22px] lg:text-[36px] font-black text-[#0d1624] tracking-tight uppercase mb-3 md:mb-4">
           NUESTRA HISTORIA
         </h2>
-        <div class="w-16 h-[3px] bg-[#f04f23] mx-auto mb-4 md:mb-6"></div>
-        <p class="font-bold text-[#0d1624] text-[14px] md:text-[18px]">
+        <div class="w-16 h-[3px] bg-[#f04f23] mx-auto mb-4 lg:mb-6"></div>
+        <p class="font-bold text-[#0d1624] text-[14px] lg:text-[18px]">
           La tecnología al alcance de todos
         </p>
       </div>
@@ -80,11 +80,11 @@ import PageHeader from "../components/PageHeader.astro";
         {/* Línea vertical de tiempo */}
         <div class="absolute left-[15px] md:left-1/2 top-2 bottom-2 w-[3px] bg-slate-100 md:-translate-x-1/2 rounded-full"></div>
         
-        <div class="space-y-12 text-slate-600 leading-relaxed text-[15px] md:text-[16px]">
+        <div class="space-y-12 text-slate-600 leading-relaxed text-[15px] lg:text-[16px]">
           {/* Hito 2014 */}
           <div class="relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full group">
             <div class="hidden md:block w-[45%] text-right pr-12">
-              <strong class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2014</strong>
+              <strong class="text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2014</strong>
             </div>
             <div class="absolute left-[-22px] md:left-1/2 w-5 h-5 rounded-full bg-[#f04f23] border-4 border-white shadow-md md:-translate-x-1/2 mt-1 md:mt-0 z-10 transition-transform duration-300 group-hover:scale-125"></div>
             <div class="md:w-[45%] pl-6 md:pl-12 bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-shadow">
@@ -101,14 +101,14 @@ import PageHeader from "../components/PageHeader.astro";
             </div>
             <div class="absolute left-[-22px] md:left-1/2 w-5 h-5 rounded-full bg-[#f04f23] border-4 border-white shadow-md md:-translate-x-1/2 mt-1 md:mt-0 z-10 transition-transform duration-300 group-hover:scale-125 order-1 md:order-2"></div>
             <div class="hidden md:block w-[45%] pl-12 md:order-3">
-              <strong class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2015-2020</strong>
+              <strong class="text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2015-2020</strong>
             </div>
           </div>
 
           {/* Hito 2022 */}
           <div class="relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full group">
             <div class="hidden md:block w-[45%] text-right pr-12">
-              <strong class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2022</strong>
+              <strong class="text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2022</strong>
             </div>
             <div class="absolute left-[-22px] md:left-1/2 w-5 h-5 rounded-full bg-[#f04f23] border-4 border-white shadow-md md:-translate-x-1/2 mt-1 md:mt-0 z-10 transition-transform duration-300 group-hover:scale-125"></div>
             <div class="md:w-[45%] pl-6 md:pl-12 bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-shadow">
@@ -125,14 +125,14 @@ import PageHeader from "../components/PageHeader.astro";
             </div>
             <div class="absolute left-[-22px] md:left-1/2 w-5 h-5 rounded-full bg-[#f04f23] border-4 border-white shadow-md md:-translate-x-1/2 mt-1 md:mt-0 z-10 transition-transform duration-300 group-hover:scale-125 order-1 md:order-2"></div>
             <div class="hidden md:block w-[45%] pl-12 md:order-3">
-              <strong class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2023</strong>
+              <strong class="text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2023</strong>
             </div>
           </div>
 
           {/* Hito 2025 */}
           <div class="relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full group">
             <div class="hidden md:block w-[45%] text-right pr-12">
-              <strong class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2025</strong>
+              <strong class="text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f04f23] to-[#ff7e5f] transition-transform duration-300 group-hover:scale-105 inline-block">2025</strong>
             </div>
             <div class="absolute left-[-22px] md:left-1/2 w-5 h-5 rounded-full bg-[#f04f23] border-4 border-white shadow-md md:-translate-x-1/2 mt-1 md:mt-0 z-10 transition-transform duration-300 group-hover:scale-125"></div>
             <div class="md:w-[45%] pl-6 md:pl-12 bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-shadow">
@@ -145,12 +145,12 @@ import PageHeader from "../components/PageHeader.astro";
     </div>
 
     {/* Misión y Visión */}
-    <div class="mt-16 md:mt-32 lg:mt-40 mb-8 md:mb-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 relative">
+    <div class="mt-12 lg:mt-16 mb-8 lg:mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 relative">
         {/* Misión Card */}
-        <div class="bg-white rounded-[2rem] p-10 md:p-14 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
+        <div class="bg-white rounded-[2rem] p-10 lg:p-14 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
           <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#f04f23] to-[#ff7e5f] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-          <h2 class="text-[20px] md:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
+          <h2 class="text-[20px] lg:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
             MISION
           </h2>
           <div class="w-16 h-[3px] bg-[#f04f23] mb-8"></div>
@@ -160,9 +160,9 @@ import PageHeader from "../components/PageHeader.astro";
         </div>
 
         {/* Visión Card */}
-        <div class="bg-white rounded-[2rem] p-10 md:p-14 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
+        <div class="bg-white rounded-[2rem] p-10 lg:p-14 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
           <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#0d1624] to-[#2a3c5a] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-          <h2 class="text-[20px] md:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
+          <h2 class="text-[20px] lg:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
             VISION
           </h2>
           <div class="w-16 h-[3px] bg-[#f04f23] mb-8"></div>
@@ -174,61 +174,61 @@ import PageHeader from "../components/PageHeader.astro";
     </div>
 
     {/* Nuestros Valores */}
-    <div class="mb-10 md:mb-20 flex flex-col items-center bg-slate-50 py-10 md:py-20 px-6 md:px-12 lg:px-20 rounded-[2.5rem] border border-slate-100 w-full">
-      <div class="text-center mb-10 md:mb-16">
-        <h2 class="text-[20px] md:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
+    <div class="mb-10 lg:mb-10 flex flex-col items-center bg-slate-50 py-10 lg:py-16 px-6 md:px-8 lg:px-20 rounded-[2.5rem] border border-slate-100 w-full">
+      <div class="text-center mb-10 lg:mb-16">
+        <h2 class="text-[20px] lg:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
           NUESTROS VALORES
         </h2>
         <div class="w-16 h-[3px] bg-[#f04f23] mx-auto"></div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 w-full max-w-5xl">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-12 w-full max-w-5xl">
         {/* Valor 1: El cliente es lo primero */}
-        <div class="flex flex-col items-center text-center group bg-white p-6 md:p-10 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="text-[#f04f23] mb-4 md:mb-8 flex items-center justify-center h-20 transform transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
+        <div class="flex flex-col items-center text-center group bg-white p-5 md:p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+          <div class="text-[#f04f23] mb-3 lg:mb-8 flex items-center justify-center h-16 lg:h-20 transform transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
             {/* SVG Hand holding heart exacto */}
-            <svg viewBox="0 0 640 512" width="50" height="50" fill="currentColor">
+            <svg viewBox="0 0 640 512" width="40" height="40" class="lg:w-[50px] lg:h-[50px]" fill="currentColor">
               <path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z"></path>
             </svg>
           </div>
-          <p class="font-bold text-[#0d1624] text-[15px]">El cliente es lo primero</p>
+          <p class="font-bold text-[#0d1624] text-[14px] lg:text-[15px]">El cliente es lo primero</p>
         </div>
 
         {/* Valor 2: Somos un solo equipo */}
-        <div class="flex flex-col items-center text-center group bg-white p-6 md:p-10 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="text-[#f04f23] mb-4 md:mb-8 flex items-center justify-center h-20 transform transition-transform duration-500 group-hover:scale-110">
+        <div class="flex flex-col items-center text-center group bg-white p-5 md:p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+          <div class="text-[#f04f23] mb-3 lg:mb-8 flex items-center justify-center h-16 lg:h-20 transform transition-transform duration-500 group-hover:scale-110">
             {/* SVG Users Group exacto */}
-            <svg viewBox="0 0 640 512" width="60" height="60" fill="currentColor">
+            <svg viewBox="0 0 640 512" width="48" height="48" class="lg:w-[60px] lg:h-[60px]" fill="currentColor">
               <path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192l42.7 0c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0L21.3 320C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7l42.7 0C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3l-213.3 0zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352l117.3 0C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7l-330.7 0c-14.7 0-26.7-11.9-26.7-26.7z"></path>
             </svg>
           </div>
-          <p class="font-bold text-[#0d1624] text-[15px]">Somos un solo equipo</p>
+          <p class="font-bold text-[#0d1624] text-[14px] lg:text-[15px]">Somos un solo equipo</p>
         </div>
 
         {/* Valor 3: Pensamos en grande */}
-        <div class="flex flex-col items-center text-center group bg-white p-6 md:p-10 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="text-[#f04f23] mb-4 md:mb-8 flex items-center justify-center h-20 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+        <div class="flex flex-col items-center text-center group bg-white p-5 md:p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+          <div class="text-[#f04f23] mb-3 lg:mb-8 flex items-center justify-center h-16 lg:h-20 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
             {/* SVG Lightbulb exacto */}
-            <svg viewBox="0 0 384 512" width="40" height="40" fill="currentColor">
+            <svg viewBox="0 0 384 512" width="32" height="32" class="lg:w-[40px] lg:h-[40px]" fill="currentColor">
               <path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2c0 0 0 0 0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4c0 0 0 0 0 0c19.8 27.1 39.7 54.4 49.2 86.2l160 0zM192 512c44.2 0 80-35.8 80-80l0-16-160 0 0 16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path>
             </svg>
           </div>
-          <p class="font-bold text-[#0d1624] text-[15px]">Pensamos en grande</p>
+          <p class="font-bold text-[#0d1624] text-[14px] lg:text-[15px]">Pensamos en grande</p>
         </div>
       </div>
     </div>
 
     {/* Nuestras Marcas */}
-    <div class="mt-10 md:mt-28 mb-0 md:mb-20 w-full border-t border-gray-100 pt-10 md:pt-20">
-      <div class="text-center mb-10 md:mb-16">
-        <h2 class="text-[20px] md:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
+    <div class="mt-10 lg:mt-12 mb-0 lg:mb-0 w-full border-t border-gray-100 pt-10 lg:pt-12">
+      <div class="text-center mb-10 lg:mb-16">
+        <h2 class="text-[20px] lg:text-[24px] font-black text-[#0d1624] tracking-tight uppercase mb-4">
           NUESTRAS MARCAS
         </h2>
         <div class="w-16 h-[3px] bg-[#f04f23] mx-auto"></div>
       </div>
 
       {/* Grid de Marcas */}
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 md:gap-y-16 items-center justify-items-center w-full max-w-[1200px] mx-auto px-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 lg:gap-y-16 items-center justify-items-center w-full max-w-[1200px] mx-auto px-4">
         {[
           { name: "Honeywell", logo: "/marcas/honeywell.png" },
           { name: "McDonnell & Miller", logo: "/marcas/mcdonnell.png" },
@@ -252,7 +252,7 @@ import PageHeader from "../components/PageHeader.astro";
               src={marca.logo} 
               alt={marca.name} 
               title={marca.name}
-              class="max-h-12 md:max-h-16 w-auto object-contain transform hover:scale-110 hover:drop-shadow-md transition-all duration-300"
+              class="max-h-12 lg:max-h-16 w-auto object-contain transform hover:scale-110 hover:drop-shadow-md transition-all duration-300"
             />
           </div>
         ))}

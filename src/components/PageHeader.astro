@@ -9,7 +9,7 @@ export interface Props {
 const { title, breadcrumbs, bgImage = "/banner_bg.jpg", bgPosition = "object-center" } = Astro.props;
 ---
 
-<div class="relative w-full min-h-[120px] md:min-h-[280px] flex flex-col items-center justify-center bg-[#070c13] overflow-hidden group">
+<div class="relative w-full min-h-[120px] md:min-h-[200px] lg:min-h-[220px] flex flex-col items-center justify-center bg-[#070c13] overflow-hidden group">
   
   {/* Imagen con zoom sutil cinematográfico */}
   <div class="absolute inset-0 z-0">
@@ -26,7 +26,7 @@ const { title, breadcrumbs, bgImage = "/banner_bg.jpg", bgPosition = "object-cen
   <div class="absolute inset-0 bg-black/10 mix-blend-multiply z-0 pointer-events-none"></div>
 
   {/* Contenido */}
-  <div class="relative z-10 flex flex-col items-center text-center px-4 pt-4 md:pt-12 pb-4 md:pb-24 w-full max-w-4xl mx-auto transform translate-y-2 md:translate-y-4 animate-fade-in-up">
+  <div class="relative z-10 flex flex-col items-center text-center px-4 pt-4 md:pt-10 lg:pt-8 pb-4 md:pb-16 lg:pb-12 w-full max-w-4xl mx-auto transform translate-y-2 lg:translate-y-4 animate-fade-in-up">
     
     {/* Breadcrumbs Premium (Ocultos si son muy cortos para evitar redundancia con el título) */}
     {breadcrumbs.length > 2 && (

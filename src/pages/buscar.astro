@@ -26,7 +26,20 @@ const rawProductResults = searchTerm
       )
   : [];
 
-const productResults = rawProductResults.map(r => r.product);
+const allProductResults = rawProductResults.map(r => r.product);
+
+const ITEMS_PER_PAGE = 16;
+const page = Number(Astro.url.searchParams.get('page')) || 1;
+const totalPages = Math.ceil(allProductResults.length / ITEMS_PER_PAGE);
+const productResults = allProductResults.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
+function getPagination(currentPage: number, totalPages: number) {
+  if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+  if (currentPage <= 3) return [1, 2, 3, '...', totalPages];
+  if (currentPage >= totalPages - 2) return [1, '...', totalPages - 2, totalPages - 1, totalPages];
+  return [1, '...', currentPage, '...', totalPages];
+}
+const paginationRange = totalPages > 1 ? getPagination(page, totalPages) : [];
 
 const categoryResults = searchTerm
   ? await db
@@ -45,14 +58,14 @@ const categoryResults = searchTerm
       { name: "INICIO", url: "/" },
       { name: "BUSCAR" }
     ]}
-    bgImage="/banner_nosotros.jpg"
+    bgImage="/productos/bc-productos.webp"
   />
 
-  <main class="max-w-[1400px] mx-auto py-16 px-4 md:px-8 min-h-[50vh]">
+  <main class="max-w-[1400px] mx-auto py-8 lg:py-10 px-4 md:px-8 min-h-[50vh]">
     {/* Mostrar categorías encontradas si existen */}
     {categoryResults.length > 0 && (
-      <div class="mb-16">
-        <div class="mb-8 flex flex-col items-center md:items-start text-center md:text-left">
+      <div class="mb-8">
+        <div class="mb-8 flex flex-col items-center text-center">
           <h2 class="text-xl font-medium text-[#0d1624]">
             {categoryResults.length} {categoryResults.length === 1 ? 'Categoría encontrada' : 'Categorías encontradas'}
           </h2>
@@ -86,10 +99,11 @@ const categoryResults = searchTerm
     {/* Sección de productos */}
 
     {productResults.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {productResults.map((product) => (
           <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
-            <div class="relative w-full h-64 p-4 bg-white flex items-center justify-center">
+            <div class="relative w-full h-48 p-4 bg-white flex items-center justify-center">
               <img 
                 src={product.imageUrl} 
                 alt={product.name} 
@@ -102,19 +116,19 @@ const categoryResults = searchTerm
                 </span>
               )}
             </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <span class="text-xs font-bold text-[#f04f23] uppercase tracking-wider mb-2">
+            <div class="p-4 flex flex-col flex-grow">
+              <span class="text-[10px] lg:text-[11px] font-semibold text-[#f04f23] uppercase tracking-wider mb-1.5">
                 {product.brand}
               </span>
-              <h3 class="text-lg font-bold text-[#0d1624] mb-2 leading-tight">
+              <h3 class="text-[13px] lg:text-[14px] font-medium text-[#0d1624] mb-1 leading-snug">
                 {product.name}
               </h3>
-              <p class="text-sm text-gray-500 mb-6 font-mono">
+              <p class="text-[11px] text-gray-500 mb-4 font-mono">
                 SKU: {product.sku}
               </p>
               
               <div class="mt-auto">
-                <a href={`/productos/${product.slug}`} class="block w-full text-center bg-gray-50 text-[#0d1624] font-bold py-3 rounded-md hover:bg-[#f04f23] hover:text-white transition-colors border border-gray-200 hover:border-[#f04f23]">
+                <a href={`/productos/${product.slug}`} class="block w-full text-center bg-gray-50 text-[#0d1624] font-medium text-[13px] py-2 rounded-md hover:bg-[#f04f23] hover:text-white transition-colors border border-gray-200 hover:border-[#f04f23]">
                   Ver Detalles
                 </a>
               </div>
@@ -122,6 +136,61 @@ const categoryResults = searchTerm
           </div>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div class="flex justify-center items-center mt-8 lg:mt-16 gap-2 md:gap-3 flex-nowrap w-full px-2">
+          {page > 1 ? (
+            <a href={`?q=${searchTerm}&page=${page - 1}`} class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-white hover:bg-slate-800 hover:border-slate-800 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300" aria-label="Página anterior">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </a>
+          ) : (
+            <span class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </span>
+          )}
+          
+          <div class="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1.5 md:py-2 bg-white border border-gray-100/80 rounded-[2rem] shadow-[0_2px_12px_rgba(0,0,0,0.03)] backdrop-blur-sm overflow-x-auto flex-nowrap scrollbar-hide" style="scrollbar-width: none;">
+            {paginationRange.map((p) => {
+              if (p === '...') {
+                return <span class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-gray-400 font-serif tracking-widest text-lg">...</span>;
+              }
+              const isCurrent = p === page;
+              return (
+                <a 
+                  href={`?q=${searchTerm}&page=${p}`} 
+                  class={`w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full text-[14px] md:text-[15px] font-semibold transition-all duration-300 ${
+                    isCurrent 
+                      ? 'bg-gradient-to-tr from-[#f04f23] to-[#ff7e5f] text-white shadow-[0_6px_16px_rgba(240,79,35,0.35)] hover:-translate-y-0.5' 
+                      : 'text-gray-600 hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm hover:-translate-y-0.5'
+                  }`}
+                  aria-current={isCurrent ? 'page' : undefined}
+                >
+                  {p}
+                </a>
+              );
+            })}
+          </div>
+          
+          {page < totalPages ? (
+            <a href={`?q=${searchTerm}&page=${page + 1}`} class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-white hover:bg-slate-800 hover:border-slate-800 hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300" aria-label="Página siguiente">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          ) : (
+            <span class="flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </span>
+          )}
+        </div>
+      )}
+      </>
     ) : (
       categoryResults.length === 0 && (
         <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-2xl border border-gray-200 border-dashed">

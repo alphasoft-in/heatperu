@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { FaYoutube as Youtube, FaFacebookF as Facebook, FaInstagram as Instagram, FaLinkedinIn as Linkedin } from 'react-icons/fa6';
-import { FiSearch as Search, FiMenu as Menu, FiX as Close } from 'react-icons/fi';
+import { FiSearch as Search, FiMenu as Menu, FiX as Close, FiMic as Mic } from 'react-icons/fi';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(true);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
+    // Verificamos soporte de la API de reconocimiento de voz
+    if (typeof window !== 'undefined') {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        setSpeechSupported(false);
+      }
+    }
   }, []);
 
   const navLinks = [
@@ -30,12 +39,43 @@ export default function Header() {
     return `px-6 py-3 border-b border-gray-50 transition-colors ${isActive ? 'text-[#f04f23] bg-orange-50/50' : 'text-gray-800 hover:bg-gray-50'}`;
   };
 
+  const startListening = () => {
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES'; // Idioma español
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const speechResult = event.results[0][0].transcript;
+      setSearchQuery(speechResult);
+      // Auto enviar la búsqueda
+      window.location.href = `/buscar?q=${encodeURIComponent(speechResult.trim())}`;
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Error en reconocimiento de voz", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
+
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const q = formData.get('q');
-    if (q && typeof q === 'string' && q.trim() !== '') {
-      window.location.href = `/buscar?q=${encodeURIComponent(q.trim())}`;
+    if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim() !== '') {
+      window.location.href = `/buscar?q=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
 
@@ -51,14 +91,26 @@ export default function Header() {
           </a>
 
           {/* Desktop Search Bar */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl mx-12">
+          <form onSubmit={handleSearch} className="hidden lg:flex flex-1 max-w-2xl mx-12 relative group">
             <input 
               type="text" 
               name="q"
-              placeholder="Buscar por producto, marca, SKU..." 
-              className="w-full border border-gray-300 rounded-l-md px-4 py-3 text-sm focus:outline-none focus:border-[#f04f23] focus:ring-1 focus:ring-[#f04f23]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={isListening ? "Escuchando su búsqueda..." : "Buscar por producto, marca, SKU..."}
+              className={`w-full border ${isListening ? 'border-[#f04f23] ring-1 ring-[#f04f23]' : 'border-gray-300'} rounded-l-md px-4 py-3 pr-[4rem] text-sm focus:outline-none focus:border-[#f04f23] focus:ring-1 focus:ring-[#f04f23] transition-all`}
             />
-            <button type="submit" className="bg-[#f04f23] text-white px-8 py-3 rounded-r-md hover:bg-[#d8401a] transition-colors flex items-center justify-center cursor-pointer">
+            {speechSupported && (
+              <button 
+                type="button" 
+                onClick={startListening}
+                className={`absolute right-[90px] top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors cursor-pointer ${isListening ? 'text-[#f04f23] animate-pulse bg-red-50' : 'text-gray-400 hover:text-[#f04f23] group-hover:text-gray-600'}`}
+                title="Búsqueda por voz"
+              >
+                <Mic className="w-5 h-5" />
+              </button>
+            )}
+            <button type="submit" className="bg-[#f04f23] text-white px-8 py-3 rounded-r-md hover:bg-[#d8401a] transition-colors flex items-center justify-center cursor-pointer z-10 relative">
               <Search className="w-5 h-5" />
             </button>
           </form>
@@ -73,7 +125,7 @@ export default function Header() {
 
           {/* Mobile Hamburger Button */}
           <button 
-            className="md:hidden text-gray-800 p-2 focus:outline-none cursor-pointer"
+            className="lg:hidden text-gray-800 p-2 focus:outline-none cursor-pointer"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Abrir menú"
           >
@@ -82,15 +134,27 @@ export default function Header() {
         </div>
 
         {/* Mobile Permanent Search Bar */}
-        <div className="md:hidden px-4 pb-4">
-          <form onSubmit={handleSearch} className="flex w-full shadow-sm">
+        <div className="lg:hidden px-4 pb-4">
+          <form onSubmit={handleSearch} className="flex w-full shadow-sm relative group">
             <input 
               type="text" 
               name="q"
-              placeholder="Buscar por producto, marca, SKU..." 
-              className="w-full border-2 border-[#f04f23] border-r-0 rounded-l-md px-4 py-2 text-sm focus:outline-none text-gray-800"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={isListening ? "Escuchando..." : "Buscar por producto, marca, SKU..."}
+              className={`w-full border-2 ${isListening ? 'border-[#f04f23] bg-red-50/20' : 'border-[#f04f23]'} border-r-0 rounded-l-md px-4 py-2 pr-[2.5rem] text-sm focus:outline-none text-gray-800 transition-colors`}
             />
-            <button type="submit" className="bg-[#f04f23] text-white px-5 py-2 rounded-r-md flex items-center justify-center cursor-pointer hover:bg-[#d8401a] transition-colors">
+            {speechSupported && (
+              <button 
+                type="button" 
+                onClick={startListening}
+                className={`absolute right-[65px] top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors cursor-pointer ${isListening ? 'text-[#f04f23] animate-pulse bg-red-50' : 'text-gray-400 hover:text-[#f04f23]'}`}
+                title="Búsqueda por voz"
+              >
+                <Mic className="w-[18px] h-[18px]" />
+              </button>
+            )}
+            <button type="submit" className="bg-[#f04f23] text-white px-5 py-2 rounded-r-md flex items-center justify-center cursor-pointer hover:bg-[#d8401a] transition-colors z-10 relative">
               <Search className="w-5 h-5" />
             </button>
           </form>
@@ -98,7 +162,7 @@ export default function Header() {
       </div>
 
       {/* Desktop Bottom Nav */}
-      <nav className="hidden md:block w-full bg-[#1e1a17] relative z-40">
+      <nav className="hidden lg:block w-full bg-[#1e1a17] relative z-40">
         <div className="max-w-[1400px] mx-auto flex items-center justify-center py-4 px-8 space-x-6 lg:space-x-10 text-sm lg:text-base font-semibold tracking-wide">
           {navLinks.map((link) => (
             <a key={link.path} href={link.path} className={getDesktopLinkClass(link.path)}>
@@ -110,9 +174,7 @@ export default function Header() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg z-30 border-t border-gray-100 flex flex-col">
-          {/* Mobile Nav Links */}
-
+        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-lg z-30 border-t border-gray-100 flex flex-col">
           {/* Mobile Nav Links */}
           <nav className="flex flex-col py-2 font-semibold text-sm text-center">
             {navLinks.map((link) => (

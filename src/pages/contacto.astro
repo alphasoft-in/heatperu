@@ -19,14 +19,14 @@ import PageHeader from "../components/PageHeader.astro";
     bgImage="/bc-servicios.jpeg"
   />
 
-  <main class="max-w-[1200px] mx-auto pt-6 pb-0 md:py-16 px-4 md:px-8">
+  <main class="max-w-[1200px] mx-auto pt-6 pb-0 md:pt-8 md:pb-8 lg:pt-8 lg:pb-2 px-4 md:px-8">
     
     <!-- Removed redundant header -->
 
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-12 lg:gap-16">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10">
       
       {/* Información de Contacto (Izquierda) */}
-      <div class="lg:col-span-2 space-y-4 md:space-y-8">
+      <div class="lg:col-span-2 flex flex-col justify-center space-y-4 md:space-y-4 lg:space-y-4 h-full">
         
         {/* Tarjeta: Dirección */}
         <div class="flex flex-col items-center text-center md:flex-row md:text-left md:items-start gap-4 md:gap-5 bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-100 hover:shadow-md transition-shadow">
@@ -131,7 +131,7 @@ import PageHeader from "../components/PageHeader.astro";
   </main>
 
   {/* Mapa de Ubicación */}
-  <div class="w-full h-[350px] md:h-[500px] mt-6 md:mt-12 -mb-8 md:-mb-16 relative z-10">
+  <div class="w-full h-[350px] md:h-[500px] mt-6 -mb-8 md:-mb-16 relative z-10">
     <iframe 
       src="https://maps.google.com/maps?q=Av.%20Argentina%20575,%20Cercado%20de%20Lima,%20Peru&t=&z=15&ie=UTF8&iwloc=&output=embed" 
       width="100%" 

@@ -71,13 +71,13 @@ const formattedProjects = dbProjects.map((project) => {
     bgPosition="object-[center_95%]"
   />
 
-  <main class="max-w-[1200px] mx-auto pt-4 pb-0 md:pt-12 md:pb-24 px-4 md:px-8">
+  <main class="max-w-[1200px] mx-auto pt-4 pb-0 md:pt-6 lg:pt-6 md:pb-12 lg:pb-4 px-4 md:px-8">
         {formattedProjects.length === 0 ? (
       <div class="text-center py-20 text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
         <p>Aún no hay proyectos registrados en la base de datos.</p>
       </div>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
         {formattedProjects.map((project) => (
             <a href={`/proyectos/${project.slug || createSlug(project.title)}`} class="bg-white border border-gray-100 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col group cursor-pointer hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500">
               <div class="w-full h-48 sm:h-56 md:h-[260px] relative bg-gray-50 overflow-hidden">
