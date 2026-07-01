@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const slides = [
-  { id: 1, imageUrl: '/sliders/slide_wayne.png', alt: 'Wayne' },
-  { id: 2, imageUrl: '/sliders/slide_becket.png', alt: 'Becket' },
-  { id: 3, imageUrl: '/sliders/slide_honeywell.png', alt: 'Honeywell' },
-  { id: 4, imageUrl: '/sliders/slide_mcdonell.png', alt: 'McDonnell' },
-  { id: 5, imageUrl: '/sliders/slide_siemens.png', alt: 'Siemens' },
-  { id: 6, imageUrl: '/sliders/slide_belgas.png', alt: 'Belgas' },
-  { id: 7, imageUrl: '/sliders/slide_armstrong.png', alt: 'Armstrong' },
-  { id: 8, imageUrl: '/sliders/slide_vmv.png', alt: 'VMV' },
-  { id: 9, imageUrl: '/sliders/slide_baite.png', alt: 'Baite' },
-  { id: 10, imageUrl: '/sliders/slide_united.png', alt: 'United Brass' }
+  { id: 1, imageUrl: '/sliders/slide_wayne.avif', alt: 'Wayne' },
+  { id: 2, imageUrl: '/sliders/slide_becket.avif', alt: 'Becket' },
+  { id: 3, imageUrl: '/sliders/slide_honeywell.avif', alt: 'Honeywell' },
+  { id: 4, imageUrl: '/sliders/slide_mcdonell.avif', alt: 'McDonnell' },
+  { id: 5, imageUrl: '/sliders/slide_siemens.avif', alt: 'Siemens' },
+  { id: 6, imageUrl: '/sliders/slide_belgas.avif', alt: 'Belgas' },
+  { id: 7, imageUrl: '/sliders/slide_armstrong.avif', alt: 'Armstrong' },
+  { id: 8, imageUrl: '/sliders/slide_vmv.avif', alt: 'VMV' },
+  { id: 9, imageUrl: '/sliders/slide_baite.avif', alt: 'Baite' },
+  { id: 10, imageUrl: '/sliders/slide_united.avif', alt: 'United Brass' }
 ];
 
 export default function Slider() {

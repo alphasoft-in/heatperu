@@ -48,7 +48,7 @@ export const POST: APIRoute = async ({ request }) => {
       title,
       description,
       order,
-      imageUrl: imageUrl || '/placeholder.png',
+      imageUrl: imageUrl || '/placeholder.avif',
     });
 
     return new Response(JSON.stringify({ success: true }), { 

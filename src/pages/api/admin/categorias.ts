@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request }) => {
     await db.insert(categories).values({
       name,
       slug,
-      imageUrl: imageUrl || '/placeholder.png',
+      imageUrl: imageUrl || '/placeholder.avif',
     });
 
     return new Response(JSON.stringify({ success: true }), { 

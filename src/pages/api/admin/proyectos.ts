@@ -72,7 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const order = orderStr ? parseInt(orderStr, 10) : 0;
-    const imageUrl = finalGallery.length > 0 ? finalGallery[0] : '/placeholder.png';
+    const imageUrl = finalGallery.length > 0 ? finalGallery[0] : '/placeholder.avif';
 
     await db.insert(projects).values({
       title,

@@ -60,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
       name,
       slug,
       categoryId,
-      imageUrl: imageUrl || '/placeholder.png',
+      imageUrl: imageUrl || '/placeholder.avif',
     });
 
     return new Response(JSON.stringify({ success: true }), { 

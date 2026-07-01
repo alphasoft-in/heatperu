@@ -7,10 +7,10 @@ async function main() {
 
   // Insert Categories
   const insertedCategories = await db.insert(categories).values([
-    { name: "ACTUADORES", slug: "actuadores", imageUrl: "/cat_actuadores.png" },
-    { name: "BOMBAS DE AGUA Y ACEITE", slug: "bombas-agua-aceite", imageUrl: "/cat_bombas_agua.png" },
-    { name: "BOMBAS DE PETRÓLEO Y ACCESORIOS", slug: "bombas-petroleo", imageUrl: "/cat_bombas_petroleo.png" },
-    { name: "CONTROLADORES", slug: "controladores", imageUrl: "/cat_controladores.png" }
+    { name: "ACTUADORES", slug: "actuadores", imageUrl: "/cat_actuadores.avif" },
+    { name: "BOMBAS DE AGUA Y ACEITE", slug: "bombas-agua-aceite", imageUrl: "/cat_bombas_agua.avif" },
+    { name: "BOMBAS DE PETRÓLEO Y ACCESORIOS", slug: "bombas-petroleo", imageUrl: "/cat_bombas_petroleo.avif" },
+    { name: "CONTROLADORES", slug: "controladores", imageUrl: "/cat_controladores.avif" }
   ]).returning();
 
   const actuadoresCategory = insertedCategories.find(c => c.slug === 'actuadores')!;
@@ -21,13 +21,13 @@ async function main() {
       categoryId: actuadoresCategory.id,
       name: "MODULACIÓN ELECTRÓNICA",
       slug: "modulacion-electronica",
-      imageUrl: "/subcat_modulacion.png"
+      imageUrl: "/subcat_modulacion.avif"
     },
     {
       categoryId: actuadoresCategory.id,
       name: "MULTIFUNCIÓN",
       slug: "multifuncion",
-      imageUrl: "/subcat_multifuncion.png"
+      imageUrl: "/subcat_multifuncion.avif"
     }
   ]).returning();
 
@@ -42,7 +42,7 @@ async function main() {
       sku: "10686",
       brand: "HONEYWELL",
       isAvailable: true,
-      imageUrl: "/prod_ml7999.png",
+      imageUrl: "/prod_ml7999.avif",
     },
     {
       subcategoryId: modulacionSubcategory.id,
@@ -51,7 +51,7 @@ async function main() {
       sku: "10302",
       brand: "HONEYWELL",
       isAvailable: true,
-      imageUrl: "/prod_r8001m1150.png",
+      imageUrl: "/prod_r8001m1150.avif",
     },
     {
       subcategoryId: modulacionSubcategory.id,
@@ -60,7 +60,7 @@ async function main() {
       sku: "10548",
       brand: "HONEYWELL",
       isAvailable: true,
-      imageUrl: "/prod_r8001m4050.png",
+      imageUrl: "/prod_r8001m4050.avif",
     },
     {
       subcategoryId: modulacionSubcategory.id,
@@ -69,7 +69,7 @@ async function main() {
       sku: "10672",
       brand: "SIEMENS",
       isAvailable: true,
-      imageUrl: "/prod_sqm45.png",
+      imageUrl: "/prod_sqm45.avif",
     }
   ]);
 

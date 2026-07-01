@@ -28,7 +28,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'El nombre es obligatorio' }), { status: 400 });
     }
 
-    let imageUrl = '/placeholder.png';
+    let imageUrl = '/placeholder.avif';
 
     if (imageFile && imageFile.size > 0) {
       const arrayBuffer = await imageFile.arrayBuffer();

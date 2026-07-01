@@ -11,7 +11,7 @@ export default function CategoryForm({ initialData }: { initialData?: InitialDat
   const [name, setName] = useState(initialData?.name || '');
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
-    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? initialData.imageUrl : null
+    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif' ? initialData.imageUrl : null
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

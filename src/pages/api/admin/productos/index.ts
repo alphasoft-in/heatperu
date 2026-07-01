@@ -111,7 +111,7 @@ export const POST: APIRoute = async ({ request }) => {
       model,
       description,
       isAvailable,
-      imageUrl: imageUrl || '/placeholder.png',
+      imageUrl: imageUrl || '/placeholder.avif',
       galleryUrls: JSON.stringify(galleryUrls),
       pdfUrl,
     });

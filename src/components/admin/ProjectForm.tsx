@@ -27,7 +27,7 @@ export default function ProjectForm({ initialData, nextOrder }: { initialData?: 
   const [gallery, setGallery] = useState<GalleryItem[]>(() => {
     const initialUrls: string[] = initialData?.gallery && initialData.gallery !== '[]' 
       ? JSON.parse(initialData.gallery) 
-      : (initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? [initialData.imageUrl] : []);
+      : (initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif' ? [initialData.imageUrl] : []);
     
     return initialUrls.map(url => ({
       id: Math.random().toString(36).substring(7),

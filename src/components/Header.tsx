@@ -87,7 +87,7 @@ export default function Header() {
           
           {/* Logo Area */}
           <a href="/" className="flex items-center">
-            <img src="/logoheat.png" alt="Heat Factory" className="h-16 md:h-24 object-contain" />
+            <img src="/logoheat.avif" alt="Heat Factory" className="h-16 md:h-24 object-contain" />
           </a>
 
           {/* Desktop Search Bar */}

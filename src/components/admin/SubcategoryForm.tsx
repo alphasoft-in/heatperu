@@ -24,7 +24,7 @@ export default function SubcategoryForm({
   const [categoryId, setCategoryId] = useState<string>(initialData?.categoryId?.toString() || '');
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
-    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? initialData.imageUrl : null
+    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif' ? initialData.imageUrl : null
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

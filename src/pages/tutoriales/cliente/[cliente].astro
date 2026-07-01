@@ -52,7 +52,7 @@ function formatDate(dateStr: string) {
       { name: "INICIO", url: "/" },
       { name: "CLIENTES", url: "/tutoriales" }
     ]}
-    bgImage="/bc-servicios.jpeg"
+    bgImage="/bc-servicios.avif"
     bgPosition="object-center"
   />
 
@@ -76,7 +76,7 @@ function formatDate(dateStr: string) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {subTutorials.map((tutorial) => {
           const videoId = getYouTubeId(tutorial.videoUrl);
-          const thumbnailUrl = tutorial.imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '/placeholder.png');
+          const thumbnailUrl = tutorial.imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.avif` : '/placeholder.avif');
           return (
             <div class="bg-white rounded-xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col group hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500">
               <a href={`/tutoriales/${tutorial.id}`} class="block relative w-full h-52 bg-white overflow-hidden border-b border-gray-100">

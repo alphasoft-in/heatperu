@@ -82,7 +82,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
         return item;
       }).filter(Boolean);
       updateData.gallery = JSON.stringify(finalGallery);
-      updateData.imageUrl = finalGallery.length > 0 ? finalGallery[0] : (updateData.imageUrl || '/placeholder.png');
+      updateData.imageUrl = finalGallery.length > 0 ? finalGallery[0] : (updateData.imageUrl || '/placeholder.avif');
     }
 
     await db.update(projects).set(updateData).where(eq(projects.id, id));

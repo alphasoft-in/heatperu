@@ -63,7 +63,7 @@ const dbSubcategories = await db.select({
                 <tr class="hover:bg-gray-50/50 transition-colors">
                   <td class="px-5 py-2.5 whitespace-nowrap">
                     <div class="flex-shrink-0 h-10 w-10 bg-white rounded border border-gray-200 overflow-hidden flex items-center justify-center p-1 shadow-sm">
-                      {subcategory.imageUrl && subcategory.imageUrl !== '/placeholder.png' ? (
+                      {subcategory.imageUrl && subcategory.imageUrl !== '/placeholder.avif' ? (
                         <img src={subcategory.imageUrl} alt={subcategory.name} class="h-full w-full object-contain" />
                       ) : (
                         <svg class="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

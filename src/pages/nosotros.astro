@@ -16,7 +16,7 @@ import PageHeader from "../components/PageHeader.astro";
       { name: "INICIO", url: "/" },
       { name: "NOSOTROS" }
     ]}
-    bgImage="/bc-servicios.jpeg"
+    bgImage="/bc-servicios.avif"
   />
 
   <main class="max-w-[1200px] mx-auto pt-8 pb-0 md:py-10 lg:pt-10 lg:pb-4 px-4 md:px-8">
@@ -26,10 +26,10 @@ import PageHeader from "../components/PageHeader.astro";
       <div class="relative w-full rounded-3xl overflow-hidden shadow-[0_20px_50px_rgb(0,0,0,0.1)] group border-[6px] border-white">
         <div class="absolute inset-0 bg-gradient-to-t from-[#0d1624]/60 via-transparent to-transparent z-10 pointer-events-none opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
         <img 
-          src="/nosotros.jpeg" 
+          src="/nosotros.avif" 
           alt="Equipo y maquinaria de Heat Factory" 
           class="w-full h-[300px] md:h-[550px] object-cover transform transition-transform duration-700 group-hover:scale-105"
-          onerror="this.src='https://placehold.co/600x550/eeeeee/999999?text=Sube+nosotros.jpeg'"
+          onerror="this.src='https://placehold.co/600x550/eeeeee/999999?text=Sube+nosotros.avif'"
         />
       </div>
 
@@ -230,22 +230,22 @@ import PageHeader from "../components/PageHeader.astro";
       {/* Grid de Marcas */}
       <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 lg:gap-y-16 items-center justify-items-center w-full max-w-[1200px] mx-auto px-4">
         {[
-          { name: "Honeywell", logo: "/marcas/honeywell.png" },
-          { name: "McDonnell & Miller", logo: "/marcas/mcdonnell.png" },
-          { name: "Baite", logo: "/marcas/baite.png" },
-          { name: "Wayne", logo: "/marcas/wayne.png" },
-          { name: "Beckett", logo: "/marcas/beckett.png" },
-          { name: "Siemens", logo: "/marcas/siemens.png" },
-          { name: "Ayvaz", logo: "/marcas/ayvaz.png" },
-          { name: "United Brass Works", logo: "/marcas/united.png" },
-          { name: "Everlasting Valve Company", logo: "/marcas/everlasting.png" },
-          { name: "Resideo", logo: "/marcas/resideo.png" },
-          { name: "Topog-E", logo: "/marcas/topog.png" },
-          { name: "Power Flame Inc.", logo: "/marcas/powerflame.png" },
-          { name: "Allanson", logo: "/marcas/allanson.png" },
-          { name: "Belgas", logo: "/marcas/belgas.png" },
-          { name: "Gems", logo: "/marcas/gems.png" },
-          { name: "Suntec", logo: "/marcas/suntec.png" },
+          { name: "Honeywell", logo: "/marcas/honeywell.avif" },
+          { name: "McDonnell & Miller", logo: "/marcas/mcdonnell.avif" },
+          { name: "Baite", logo: "/marcas/baite.avif" },
+          { name: "Wayne", logo: "/marcas/wayne.avif" },
+          { name: "Beckett", logo: "/marcas/beckett.avif" },
+          { name: "Siemens", logo: "/marcas/siemens.avif" },
+          { name: "Ayvaz", logo: "/marcas/ayvaz.avif" },
+          { name: "United Brass Works", logo: "/marcas/united.avif" },
+          { name: "Everlasting Valve Company", logo: "/marcas/everlasting.avif" },
+          { name: "Resideo", logo: "/marcas/resideo.avif" },
+          { name: "Topog-E", logo: "/marcas/topog.avif" },
+          { name: "Power Flame Inc.", logo: "/marcas/powerflame.avif" },
+          { name: "Allanson", logo: "/marcas/allanson.avif" },
+          { name: "Belgas", logo: "/marcas/belgas.avif" },
+          { name: "Gems", logo: "/marcas/gems.avif" },
+          { name: "Suntec", logo: "/marcas/suntec.avif" },
         ].map((marca) => (
           <div class="w-full flex justify-center p-4">
             <img 

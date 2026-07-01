@@ -16,7 +16,7 @@ export default function ServiceForm({ initialData, nextOrder }: { initialData?: 
   const [order, setOrder] = useState<number>(initialData?.order ?? nextOrder ?? 1);
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
-    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? initialData.imageUrl : null
+    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif' ? initialData.imageUrl : null
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

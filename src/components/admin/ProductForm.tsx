@@ -37,7 +37,7 @@ export default function ProductForm({
   const [isAvailable, setIsAvailable] = useState<boolean>(initialData?.isAvailable ?? true);
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
-    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.png' ? initialData.imageUrl : null
+    initialData?.imageUrl && initialData.imageUrl !== '/placeholder.avif' ? initialData.imageUrl : null
   );
   
   // Gallery states

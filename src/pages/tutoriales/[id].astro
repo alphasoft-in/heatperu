@@ -53,7 +53,7 @@ const getYouTubeId = (url: string) => {
 };
 
 const videoId = getYouTubeId(tutorial.videoUrl);
-const thumbnailUrl = tutorial.imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '/placeholder.png');
+const thumbnailUrl = tutorial.imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.avif` : '/placeholder.avif');
 
 let descriptionHtml = marked.parse(tutorial.description, { breaks: true, gfm: true });
 if (typeof descriptionHtml === 'string') {
@@ -77,7 +77,7 @@ if (typeof descriptionHtml === 'string') {
       { name: "INICIO", url: "/" },
       { name: "TUTORIALES", url: "/tutoriales" }
     ]}
-    bgImage="/bc-servicios.jpeg"
+    bgImage="/bc-servicios.avif"
     bgPosition="object-center"
   />
 

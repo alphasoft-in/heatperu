@@ -59,7 +59,7 @@ const dbProjects = await db.select()
                 <tr class="hover:bg-gray-50/50 transition-colors">
                   <td class="px-5 py-2.5 whitespace-nowrap">
                     <div class="flex-shrink-0 h-10 w-14 bg-white rounded border border-gray-200 overflow-hidden flex items-center justify-center shadow-sm">
-                      {project.imageUrl && project.imageUrl !== '/placeholder.png' ? (
+                      {project.imageUrl && project.imageUrl !== '/placeholder.avif' ? (
                         <img src={project.imageUrl} alt={project.title} class="h-full w-full object-cover" />
                       ) : (
                         <svg class="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
