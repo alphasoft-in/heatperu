@@ -81,7 +81,7 @@ export const tutorials = pgTable('tutorials', {
 });
 
 export const complaints = pgTable('complaints', {
-  id: serial('id').primaryKey(),
+  id: text('id').primaryKey(),
   consumerName: text('consumer_name').notNull(),
   documentType: text('document_type').notNull(),
   documentNumber: text('document_number').notNull(),
@@ -95,7 +95,11 @@ export const complaints = pgTable('complaints', {
   complaintDetail: text('complaint_detail').notNull(),
   consumerRequest: text('consumer_request').notNull(),
   status: text('status').default('Pendiente').notNull(),
+  resolutionType: text('resolution_type'),
+  resolutionMessage: text('resolution_message'),
+  securityToken: text('security_token').notNull().default(''),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  resolvedAt: timestamp('resolved_at'),
 });
 
 export const subscribers = pgTable('subscribers', {

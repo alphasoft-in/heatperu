@@ -5,15 +5,20 @@ import { eq } from 'drizzle-orm';
 
 export const PUT: APIRoute = async ({ request, params }) => {
   try {
-    const id = parseInt(params.id as string);
-    if (isNaN(id)) {
+    const id = params.id as string;
+    if (!id) {
       return new Response(JSON.stringify({ success: false, message: 'ID inválido' }), { status: 400 });
     }
 
     const data = await request.json();
     
     await db.update(complaints)
-      .set({ status: data.status })
+      .set({ 
+        status: data.status,
+        resolutionType: data.resolutionType || null,
+        resolutionMessage: data.resolutionMessage || null,
+        resolvedAt: data.status === 'Atendido' ? new Date() : null
+      })
       .where(eq(complaints.id, id));
 
     return new Response(JSON.stringify({ success: true, message: 'Estado actualizado exitosamente' }), {

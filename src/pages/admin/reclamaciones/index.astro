@@ -12,6 +12,21 @@ const offset = (page - 1) * limit;
 
 const totalItemsResult = await db.select({ value: count() }).from(complaints);
 const totalItems = totalItemsResult[0].value;
+
+function getBusinessDaysElapsed(startDate: Date) {
+  let count = 0;
+  const curDate = new Date(startDate.getTime());
+  const endDate = new Date();
+  curDate.setHours(0,0,0,0);
+  endDate.setHours(0,0,0,0);
+  
+  while (curDate < endDate) {
+      curDate.setDate(curDate.getDate() + 1);
+      const dayOfWeek = curDate.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+  }
+  return count;
+}
 const totalPages = Math.ceil(totalItems / limit);
 
 const dbComplaints = await db.select()
@@ -54,11 +69,14 @@ const dbComplaints = await db.select()
               {dbComplaints.map((complaint) => (
                 <tr class="hover:bg-gray-50/50 transition-colors">
                   <td class="px-5 py-3 whitespace-nowrap">
-                    <span class="text-xs font-mono font-bold text-gray-500">#{complaint.id}</span>
+                    <span class="text-xs font-mono font-bold text-gray-500">{complaint.id}</span>
                   </td>
                   <td class="px-5 py-3 whitespace-nowrap">
-                    <span class="text-[12px] text-gray-600">
+                    <span class="text-[12px] text-gray-600 block">
                       {new Date(complaint.createdAt).toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </span>
+                    <span class="text-[11px] text-gray-400">
+                      {new Date(complaint.createdAt).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </td>
                   <td class="px-5 py-3">
@@ -66,18 +84,30 @@ const dbComplaints = await db.select()
                     <div class="text-[11px] text-gray-400">{complaint.documentType}: {complaint.documentNumber}</div>
                   </td>
                   <td class="px-5 py-3 whitespace-nowrap">
-                    <span class={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                    <span class={`inline-flex px-2 py-0.5 rounded text-[10px] font-medium uppercase ${
                       complaint.complaintType === 'Reclamo' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-blue-50 text-blue-600 border border-blue-100'
                     }`}>
                       {complaint.complaintType}
                     </span>
                   </td>
                   <td class="px-5 py-3 whitespace-nowrap">
-                    <span class={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                      complaint.status === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
-                    }`}>
-                      {complaint.status}
-                    </span>
+                    <div class="flex flex-col items-start gap-1">
+                      <span class={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium ${
+                        complaint.status === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
+                      }`}>
+                        {complaint.status}
+                      </span>
+                      {complaint.status === 'Pendiente' && (
+                        <span class={`text-[10px] font-semibold flex items-center gap-1 ${
+                          getBusinessDaysElapsed(complaint.createdAt) >= 13 ? 'text-red-600' : 
+                          getBusinessDaysElapsed(complaint.createdAt) >= 10 ? 'text-orange-500' : 
+                          'text-gray-400'
+                        }`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                          {getBusinessDaysElapsed(complaint.createdAt)}/15 días hábiles
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td class="px-5 py-3 whitespace-nowrap text-right text-sm font-medium">
                     <div class="flex justify-end gap-3">

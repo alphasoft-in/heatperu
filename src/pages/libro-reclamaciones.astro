@@ -417,11 +417,18 @@ import Header from "../components/Header.tsx";
                 }
                 form.reset();
               } else {
-                if (errorMessage) errorMessage.classList.remove('hidden');
+                const errData = await res.json().catch(() => null);
+                if (errorMessage) {
+                  errorMessage.innerHTML = `❌ ${errData?.message || 'Ocurrió un error al enviar el reclamo. Por favor intente nuevamente.'}`;
+                  errorMessage.classList.remove('hidden');
+                }
               }
-            } catch (error) {
+            } catch (error: any) {
               console.error(error);
-              if (errorMessage) errorMessage.classList.remove('hidden');
+              if (errorMessage) {
+                errorMessage.innerHTML = `❌ Error de red: ${error?.message || 'No se pudo conectar con el servidor.'}`;
+                errorMessage.classList.remove('hidden');
+              }
             } finally {
               if (submitBtn) submitBtn.disabled = false;
               if (submitText) submitText.textContent = 'Enviar Reclamo / Queja';
