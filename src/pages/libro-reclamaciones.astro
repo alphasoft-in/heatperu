@@ -29,7 +29,7 @@ import Header from "../components/Header.tsx";
         </div>
       </div>
 
-      <form id="complaintForm" class="space-y-8 md:space-y-12">
+      <form id="complaintForm" class="space-y-8 md:space-y-12" novalidate>
         {/* Sección 1: Datos del Consumidor */}
         <section>
           <h3 class="flex flex-col md:flex-row items-center text-center md:text-left text-[14px] md:text-[16px] font-bold text-[#0d1624] mb-6 uppercase tracking-wide">
@@ -39,12 +39,12 @@ import Header from "../components/Header.tsx";
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="md:col-span-2">
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Nombres y Apellidos Completos *</label>
-              <input type="text" id="consumerName" name="consumerName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" />
+              <input type="text" id="consumerName" name="consumerName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: Juan Pérez García" />
             </div>
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Tipo de Documento *</label>
-              <select id="documentType" name="documentType" required class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]">
-                <option value="">Seleccione...</option>
+              <select id="documentType" name="documentType" required onchange="document.getElementById('documentNumber').value = ''" class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]">
+                <option value="" disabled selected>Selecciona una opción</option>
                 <option value="DNI">DNI</option>
                 <option value="CE">Carnet de Extranjería</option>
                 <option value="PAS">Pasaporte</option>
@@ -53,19 +53,19 @@ import Header from "../components/Header.tsx";
             </div>
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Número de Documento *</label>
-              <input type="text" id="documentNumber" name="documentNumber" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" />
+              <input type="text" id="documentNumber" name="documentNumber" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: 12345678" />
             </div>
             <div class="md:col-span-2">
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Dirección de Domicilio *</label>
-              <input type="text" id="address" name="address" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" />
+              <input type="text" id="address" name="address" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: Av. Javier Prado 1234, Lima" />
             </div>
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Teléfono / Celular *</label>
-              <input type="tel" id="phone" name="phone" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" />
+              <input type="tel" id="phone" name="phone" required oninput="this.value = this.value.replace(/[^0-9+() -]/g, '')" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: 987 654 321" />
             </div>
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Correo Electrónico *</label>
-              <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" />
+              <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: correo@ejemplo.com" />
             </div>
           </div>
         </section>
@@ -80,14 +80,14 @@ import Header from "../components/Header.tsx";
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Tipo *</label>
               <select id="productType" name="productType" required class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]">
-                <option value="">Seleccione...</option>
+                <option value="" disabled selected>Selecciona una opción</option>
                 <option value="Producto">Producto</option>
                 <option value="Servicio">Servicio</option>
               </select>
             </div>
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Monto Reclamado (S/) *</label>
-              <input type="number" step="0.01" id="amount" name="amount" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: 150.00" />
+              <input type="number" step="0.01" id="amount" name="amount" required onwheel="this.blur()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px]" placeholder="Ej: 150.00" />
             </div>
             <div class="md:col-span-2">
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Descripción del Producto o Servicio *</label>
@@ -125,7 +125,7 @@ import Header from "../components/Header.tsx";
             
             <div>
               <label class="block text-[13px] font-semibold text-slate-700 mb-2">Detalle de la reclamación *</label>
-              <textarea id="complaintDetail" name="complaintDetail" required rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px] resize-none"></textarea>
+              <textarea id="complaintDetail" name="complaintDetail" required rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-[#f04f23] text-[14px] resize-none" placeholder="Describa detalladamente el motivo de su reclamo o queja..."></textarea>
             </div>
             
             <div>
@@ -138,9 +138,9 @@ import Header from "../components/Header.tsx";
         {/* Políticas y Envío */}
         <div class="pt-4 md:pt-6 border-t border-slate-100">
           <label class="flex items-start gap-3 mb-6 md:mb-8 cursor-pointer">
-            <input type="checkbox" required class="mt-1 w-4 h-4 text-[#f04f23] bg-slate-50 border-slate-300 rounded focus:ring-[#f04f23]" />
+            <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required class="mt-1 w-4 h-4 text-[#f04f23] bg-slate-50 border-slate-300 rounded focus:ring-[#f04f23]" />
             <span class="text-[13px] text-slate-600 leading-relaxed">
-              Declaro que los datos consignados son correctos y fieles a la verdad. Asimismo, acepto las <button type="button" onclick="document.getElementById('privacyModal').showModal()" class="text-[#f04f23] underline hover:text-[#d0421c]">Políticas de Privacidad</button> para el tratamiento de mis datos personales en la gestión de esta reclamación.
+              Declaro que los datos consignados son correctos y fieles a la verdad. Asimismo, acepto las <button type="button" onclick="document.getElementById('privacyModal').showModal()" class="text-[#f04f23] underline hover:text-[#d0421c] cursor-pointer">Políticas de Privacidad</button> para el tratamiento de mis datos personales en la gestión de esta reclamación.
             </span>
           </label>
           
@@ -163,8 +163,206 @@ import Header from "../components/Header.tsx";
       </form>
 
       <script>
-        const form = document.getElementById('complaintForm') as HTMLFormElement;
-        const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+        // ─── Helpers de Validación ───────────────────────────────────────────
+        function showError(fieldId: string, message: string) {
+          const field = document.getElementById(fieldId);
+          if (!field) return;
+          field.classList.add('border-red-400', 'bg-red-50');
+          field.classList.remove('border-slate-200', 'bg-slate-50');
+          let errorEl = field.parentElement?.querySelector('.field-error');
+          if (!errorEl) {
+            errorEl = document.createElement('p');
+            errorEl.className = 'field-error text-red-500 text-[11px] mt-1 font-medium';
+            field.parentElement?.appendChild(errorEl);
+          }
+          errorEl.textContent = message;
+        }
+
+        function clearError(fieldId: string) {
+          const field = document.getElementById(fieldId);
+          if (!field) return;
+          field.classList.remove('border-red-400', 'bg-red-50');
+          field.classList.add('border-slate-200', 'bg-slate-50');
+          field.parentElement?.querySelector('.field-error')?.remove();
+        }
+
+        function clearAllErrors() {
+          document.querySelectorAll('.field-error').forEach(el => el.remove());
+          document.querySelectorAll('.border-red-400').forEach(el => {
+            el.classList.remove('border-red-400', 'bg-red-50');
+            el.classList.add('border-slate-200', 'bg-slate-50');
+          });
+        }
+
+        // ─── Generación de Hash SHA-256 ──────────────────────────────────────
+        async function generateHash(data: { consumerName: string; documentType: string; documentNumber: string; complaintType: string; complaintDetail: string }) {
+          const timestamp = new Date().toISOString();
+          const payload = [
+            timestamp,
+            data.consumerName,
+            data.documentType,
+            data.documentNumber,
+            data.complaintType,
+            data.complaintDetail,
+          ].join('|');
+
+          const encoder = new TextEncoder();
+          const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(payload));
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+          return { hash: hashHex, timestamp };
+        }
+
+        // ─── Validación del Formulario ───────────────────────────────────────
+        function validateForm(data: {
+          consumerName: string;
+          documentType: string;
+          documentNumber: string;
+          address: string;
+          phone: string;
+          email: string;
+          productType: string;
+          amount: string;
+          productDescription: string;
+          complaintType: string;
+          complaintDetail: string;
+          consumerRequest: string;
+          privacyPolicy?: string;
+        }) {
+          const errors: string[] = [];
+
+          // Sección 1
+          if (!data.consumerName || data.consumerName.trim().length < 3) {
+            showError('consumerName', 'Ingrese su nombre completo (mínimo 3 caracteres).');
+            errors.push('consumerName');
+          } else clearError('consumerName');
+
+          if (!data.documentType) {
+            const sel = document.getElementById('documentType');
+            sel?.classList.add('border-red-400', 'bg-red-50');
+            sel?.classList.remove('border-slate-200', 'bg-slate-50');
+            let err = sel?.parentElement?.querySelector('.field-error');
+            if (!err) {
+              err = document.createElement('p');
+              err.className = 'field-error text-red-500 text-[11px] mt-1 font-medium';
+              sel?.parentElement?.appendChild(err);
+            }
+            err.textContent = 'Seleccione un tipo de documento.';
+            errors.push('documentType');
+          } else clearError('documentType');
+
+          let docError = '';
+          const docNum = data.documentNumber ? data.documentNumber.trim() : '';
+
+          if (!docNum) {
+            docError = 'Ingrese su número de documento.';
+          } else if (!/^[0-9]+$/.test(docNum)) {
+            docError = 'El documento solo debe contener números.';
+          } else {
+            if (data.documentType === 'DNI' && docNum.length !== 8) {
+              docError = 'El DNI debe tener exactamente 8 dígitos.';
+            } else if (data.documentType === 'RUC' && docNum.length !== 11) {
+              docError = 'El RUC debe tener exactamente 11 dígitos.';
+            } else if (data.documentType === 'CE' && docNum.length !== 9) {
+              docError = 'El Carnet de Extranjería debe tener 9 dígitos.';
+            } else if (data.documentType === 'PAS' && docNum.length < 6) {
+              docError = 'El Pasaporte debe tener al menos 6 dígitos.';
+            }
+          }
+
+          if (docError) {
+            showError('documentNumber', docError);
+            errors.push('documentNumber');
+          } else {
+            clearError('documentNumber');
+          }
+
+          if (!data.address || data.address.trim().length < 5) {
+            showError('address', 'Ingrese su dirección de domicilio.');
+            errors.push('address');
+          } else clearError('address');
+
+          const phoneRegex = /^[+]?[\d\s\-()]{7,15}$/;
+          if (!data.phone || !phoneRegex.test(data.phone.trim())) {
+            showError('phone', 'Ingrese un número de teléfono válido.');
+            errors.push('phone');
+          } else clearError('phone');
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!data.email || !emailRegex.test(data.email.trim())) {
+            showError('email', 'Ingrese un correo electrónico válido.');
+            errors.push('email');
+          } else clearError('email');
+
+          // Sección 2
+          if (!data.productType) {
+            const sel = document.getElementById('productType');
+            sel?.classList.add('border-red-400', 'bg-red-50');
+            sel?.classList.remove('border-slate-200', 'bg-slate-50');
+            let err = sel?.parentElement?.querySelector('.field-error');
+            if (!err) {
+              err = document.createElement('p');
+              err.className = 'field-error text-red-500 text-[11px] mt-1 font-medium';
+              sel?.parentElement?.appendChild(err);
+            }
+            err.textContent = 'Seleccione un tipo de bien.';
+            errors.push('productType');
+          } else clearError('productType');
+
+          if (!data.amount || parseFloat(data.amount) <= 0) {
+            showError('amount', 'Ingrese un monto reclamado válido (mayor a 0).');
+            errors.push('amount');
+          } else clearError('amount');
+
+          if (!data.productDescription || data.productDescription.trim().length < 5) {
+            showError('productDescription', 'Describa el producto o servicio (mínimo 5 caracteres).');
+            errors.push('productDescription');
+          } else clearError('productDescription');
+
+          // Sección 3
+          if (!data.complaintType) {
+            const radioGroup = document.querySelector('[name="complaintType"]')?.closest('div');
+            if (radioGroup && !radioGroup.querySelector('.field-error')) {
+              const err = document.createElement('p');
+              err.className = 'field-error text-red-500 text-[11px] mt-1 font-medium';
+              err.textContent = 'Seleccione el tipo de reclamación.';
+              radioGroup.appendChild(err);
+            }
+            errors.push('complaintType');
+          } else {
+            document.querySelector('[name="complaintType"]')?.closest('div')?.querySelector('.field-error')?.remove();
+          }
+
+          if (!data.complaintDetail || data.complaintDetail.trim().length < 20) {
+            showError('complaintDetail', 'El detalle debe tener al menos 20 caracteres.');
+            errors.push('complaintDetail');
+          } else clearError('complaintDetail');
+
+          if (!data.consumerRequest || data.consumerRequest.trim().length < 10) {
+            showError('consumerRequest', 'Indique su pedido (mínimo 10 caracteres).');
+            errors.push('consumerRequest');
+          } else clearError('consumerRequest');
+
+          if (!data.privacyPolicy) {
+            const checkboxContainer = document.getElementById('privacyPolicy')?.closest('label');
+            if (checkboxContainer && !checkboxContainer.parentElement?.querySelector('.field-error')) {
+              const err = document.createElement('p');
+              err.className = 'field-error text-red-500 text-[11px] mt-1 font-medium';
+              err.textContent = 'Debe aceptar la declaración y políticas de privacidad para continuar.';
+              checkboxContainer.parentElement?.appendChild(err);
+            }
+            errors.push('privacyPolicy');
+          } else {
+            const checkboxContainer = document.getElementById('privacyPolicy')?.closest('label');
+            checkboxContainer?.parentElement?.querySelector('.field-error')?.remove();
+          }
+
+          return errors;
+        }
+
+        // ─── Submit ──────────────────────────────────────────────────────────
+        const form = document.getElementById('complaintForm') as HTMLFormElement | null;
+        const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
         const submitText = document.getElementById('submitText');
         const submitIcon = document.getElementById('submitIcon');
         const successMessage = document.getElementById('successMessage');
@@ -173,28 +371,50 @@ import Header from "../components/Header.tsx";
         if (form) {
           form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+            clearAllErrors();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries()) as {
+              consumerName: string; documentType: string; documentNumber: string;
+              address: string; phone: string; email: string; productType: string;
+              amount: string; productDescription: string; complaintType: string;
+              complaintDetail: string; consumerRequest: string;
+              [key: string]: string;
+            };
+
+            // Validar
+            const errors = validateForm(data);
+            if (errors.length > 0) {
+              const firstErrorField = document.getElementById(errors[0]) || document.querySelector(`[name="${errors[0]}"]`);
+              firstErrorField?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              return;
+            }
+
+            // Generar hash de integridad
+            const { hash, timestamp } = await generateHash(data);
+            data.hash = hash;
+            data.timestamp = timestamp;
+
             // UI Loading state
-            submitBtn.disabled = true;
+            if (submitBtn) submitBtn.disabled = true;
             if (submitText) submitText.textContent = 'Enviando...';
             if (submitIcon) submitIcon.classList.add('hidden');
             if (successMessage) successMessage.classList.add('hidden');
             if (errorMessage) errorMessage.classList.add('hidden');
 
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
             try {
               const res = await fetch('/api/reclamaciones', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
               });
 
               if (res.ok) {
-                if (successMessage) successMessage.classList.remove('hidden');
+                if (successMessage) {
+                  successMessage.innerHTML = `✅ Su reclamo ha sido enviado exitosamente. En breve recibirá una copia en su correo.<br><span class="text-[11px] font-mono text-green-600 mt-1 block">Código de validez: ${hash.substring(0, 16).toUpperCase()}</span>`;
+                  successMessage.classList.remove('hidden');
+                  window.scrollTo({ top: successMessage.offsetTop - 100, behavior: 'smooth' });
+                }
                 form.reset();
               } else {
                 if (errorMessage) errorMessage.classList.remove('hidden');
@@ -203,8 +423,7 @@ import Header from "../components/Header.tsx";
               console.error(error);
               if (errorMessage) errorMessage.classList.remove('hidden');
             } finally {
-              // Restore UI
-              submitBtn.disabled = false;
+              if (submitBtn) submitBtn.disabled = false;
               if (submitText) submitText.textContent = 'Enviar Reclamo / Queja';
               if (submitIcon) submitIcon.classList.remove('hidden');
             }
@@ -217,12 +436,12 @@ import Header from "../components/Header.tsx";
     <dialog id="privacyModal" class="bg-white rounded-2xl shadow-2xl p-0 w-[90%] max-w-2xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 border-0 z-50">
       <div class="p-4 sm:p-5 md:p-8 max-h-[85vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-3 md:mb-6">
-          <h3 class="text-[18px] md:text-[20px] font-bold text-[#0d1624]">Políticas de Privacidad</h3>
+          <h3 class="text-[16px] md:text-[18px] font-bold text-[#0d1624]">Políticas de Privacidad</h3>
           <button type="button" onclick="document.getElementById('privacyModal').close()" class="text-slate-400 hover:text-[#f04f23] transition-colors focus:outline-none">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
-        <div class="text-[12px] md:text-[14px] text-slate-600 leading-snug md:leading-relaxed space-y-2.5 md:space-y-4">
+        <div class="text-[11px] md:text-[13px] text-slate-600 leading-snug md:leading-relaxed space-y-2.5 md:space-y-4">
           <p>De conformidad con la Ley N° 29733, Ley de Protección de Datos Personales, el usuario otorga su consentimiento expreso para que los datos personales que facilite en este formulario queden incorporados en el Banco de Datos de <strong>GRUPO EMPRESARIAL ZEVALLOS S.A.C.</strong></p>
           <p>Estos datos serán tratados de forma estrictamente confidencial con la finalidad única de gestionar su reclamo o queja, contactarlo para brindarle una respuesta oportuna y llevar un registro estadístico de atención al cliente.</p>
           <p>Usted puede ejercer en cualquier momento sus derechos de acceso, rectificación, cancelación y oposición de sus datos personales comunicándose a nuestro correo electrónico oficial: <strong>privacidad@heatperu.com</strong>.</p>

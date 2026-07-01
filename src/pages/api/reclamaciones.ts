@@ -1,10 +1,18 @@
 import type { APIRoute } from 'astro';
 import { db } from '../../db';
 import { complaints } from '../../db/schema';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-// Create a Resend instance with the API key from environment variables
-const resend = new Resend(process.env.RESEND_API_KEY || 're_123'); // Fallback to avoid crashes if env is missing
+// Configure Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT) || 465,
+  secure: true, // true for 465, false for other ports like 587
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -26,11 +34,11 @@ export const POST: APIRoute = async ({ request }) => {
       consumerRequest: data.consumerRequest,
     }).returning();
 
-    // Send email using Resend
-    if (process.env.RESEND_API_KEY) {
-      await resend.emails.send({
-        from: 'HeatPeru <onboarding@resend.dev>', // Usar dominio de prueba para asegurar envío si no hay dominio verificado
-        to: [data.email],
+    // Send email using Nodemailer
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      await transporter.sendMail({
+        from: `"HeatPeru" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+        to: data.email,
         subject: `Copia de su ${data.complaintType} - HeatPeru (Ticket #${newComplaint.id})`,
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
