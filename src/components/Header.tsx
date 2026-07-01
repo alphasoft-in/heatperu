@@ -106,11 +106,12 @@ export default function Header() {
                 onClick={startListening}
                 className={`absolute right-[90px] top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors cursor-pointer ${isListening ? 'text-[#f04f23] animate-pulse bg-red-50' : 'text-gray-400 hover:text-[#f04f23] group-hover:text-gray-600'}`}
                 title="Búsqueda por voz"
+                aria-label="Búsqueda por voz"
               >
                 <Mic className="w-5 h-5" />
               </button>
             )}
-            <button type="submit" className="bg-[#f04f23] text-white px-8 py-3 rounded-r-md hover:bg-[#d8401a] transition-colors flex items-center justify-center cursor-pointer z-10 relative">
+            <button type="submit" aria-label="Buscar" className="bg-[#f04f23] text-white px-8 py-3 rounded-r-md hover:bg-[#d8401a] transition-colors flex items-center justify-center cursor-pointer z-10 relative">
               <Search className="w-5 h-5" />
             </button>
           </form>
@@ -150,11 +151,12 @@ export default function Header() {
                 onClick={startListening}
                 className={`absolute right-[65px] top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors cursor-pointer ${isListening ? 'text-[#f04f23] animate-pulse bg-red-50' : 'text-gray-400 hover:text-[#f04f23]'}`}
                 title="Búsqueda por voz"
+                aria-label="Búsqueda por voz"
               >
                 <Mic className="w-[18px] h-[18px]" />
               </button>
             )}
-            <button type="submit" className="bg-[#f04f23] text-white px-5 py-2 rounded-r-md flex items-center justify-center cursor-pointer hover:bg-[#d8401a] transition-colors z-10 relative">
+            <button type="submit" aria-label="Buscar" className="bg-[#f04f23] text-white px-5 py-2 rounded-r-md flex items-center justify-center cursor-pointer hover:bg-[#d8401a] transition-colors z-10 relative">
               <Search className="w-5 h-5" />
             </button>
           </form>
